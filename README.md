@@ -1,6 +1,5 @@
-# plugin-starter
-
-Halo 2.0 插件开发快速开始模板。
+# plugin-artalk
+为 halo2.0 集成artalk评论区
 
 ## 开发环境
 
@@ -27,8 +26,8 @@ git clone git@github.com:{your_github_id}/plugin-starter.git
 cd path/to/plugin-starter
 ```
 
-### 运行方式 1（推荐）
-
+### 本地开发（推荐）
+其他方式参见 halo 文档
 > 此方式需要本地安装 Docker
 
 ```bash
@@ -46,31 +45,4 @@ cd path/to/plugin-starter
 # Windows
 ./gradlew.bat haloServer
 ```
-
-执行此命令后，会自动创建一个 Halo 的 Docker 容器并加载当前的插件，更多文档可查阅：<https://docs.halo.run/developer-guide/plugin/basics/devtools>
-
-### 运行方式 2
-
-> 此方式需要使用源码运行 Halo
-
-编译插件：
-
-```bash
-# macOS / Linux
-./gradlew build
-
-# Windows
-./gradlew.bat build
-```
-
-修改 Halo 配置文件：
-
-```yaml
-halo:
-  plugin:
-    runtime-mode: development
-    fixedPluginPath:
-      - "/path/to/plugin-starter"
-```
-
 最后重启 Halo 项目即可。
