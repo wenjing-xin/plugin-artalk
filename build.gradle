@@ -1,11 +1,10 @@
 plugins {
     id 'java'
-    id "com.github.node-gradle.node" version "5.0.0"
     id "io.freefair.lombok" version "8.0.1"
-    id "run.halo.plugin.devtools" version "0.0.9"
+    id "run.halo.plugin.devtools" version "0.0.7"
 }
 
-group 'run.halo.starter'
+group 'xin.wenjing.halo'
 sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -16,9 +15,8 @@ repositories {
 }
 
 dependencies {
-    implementation platform('run.halo.tools.platform:plugin:2.11.0-SNAPSHOT')
+    implementation platform('run.halo.tools.platform:plugin:2.14.0-SNAPSHOT')
     compileOnly 'run.halo.app:api'
-
     testImplementation 'run.halo.app:api'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -31,26 +29,12 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
 }
 
-node {
-    nodeProjectDir = file("${project.projectDir}/ui")
-}
-
-tasks.register('buildFrontend', PnpmTask) {
-    args = ['build']
-    dependsOn('installDepsForUI')
-}
-
-tasks.register('installDepsForUI', PnpmTask) {
-    args = ['install']
-}
 
 build {
-    // build frontend before build
-    tasks.named('compileJava').configure {
-        dependsOn('buildFrontend')
-    }
+
 }
 
 halo {
-    version = '2.11'
+    version = '2.14.0'
+    debug = true
 }
