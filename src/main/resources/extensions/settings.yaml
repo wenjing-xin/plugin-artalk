@@ -1,0 +1,63 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: plugin-artalk-setting
+spec:
+  forms:
+    - group: baseConf
+      label: 基本配置
+      formSchema:
+        - $formkit: text
+          name: siteTitle
+          label: 站点名称
+          value:
+          help: 和artalk里边配置的站点名称一致即可
+        - $formkit: url
+          name: artalkUrl
+          label: artalk 部署地址
+          value:
+          help: 例如https://artalk.domain.com
+          validation: required
+        - $formkit: url
+          name: jsUrl
+          label: artalk的js资源地址
+          value:
+          help: 使用在线的js资源是最新版本的(如果你使用的不是最新版本请引入自己的js文件)
+          validation: required
+        - $formkit: url
+          name: cssUrl
+          label: artalk的css资源地址
+          value:
+          help: 使用在线的css资源是最新版本的(如果你使用的不是最新版本请引入自己的css文件)
+          validation: required
+        - $formkit: radio
+          name: enableLatex
+          id: enableLatex
+          key: enableLatex
+          label: 是否开启数学公式支持
+          help: 开启后评论区可支持数学公式，对于学术性站点是必不可少的
+          value: false
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: radio
+          name: enableCustomCss
+          id: enableCustomCss
+          key: enableCustomCss
+          label: 是否自定css样式
+          value: false
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: code
+          name: customCss
+          if: $get(enableCustomCss).value
+          label: css样式
+          value:
+          language: css
+          help: 支持css语法样式,无需包裹style标签
+          height: 350px

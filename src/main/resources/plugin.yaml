@@ -1,22 +1,21 @@
-# Refer https://docs.halo.run/developer-guide/plugin/basics/manifest
-
 apiVersion: plugin.halo.run/v1alpha1
 kind: Plugin
 metadata:
-  # The name defines how the plugin is invoked, A unique name
-  name: starter
+  name: plugin-artalk
 spec:
   enabled: true
-  requires: ">=2.11.0"
+  requires: ">=2.14.0"
   author:
     name: Halo
-    website: https://github.com/halo-dev
+    website: https://wenjing.xin
   logo: logo.png
-  homepage: https://github.com/halo-dev/plugin-starter#readme
-  repo: https://github.com/halo-dev/plugin-starter
-  issues: https://github.com/halo-dev/plugin-starter/issues
-  displayName: "插件快速开始模板"
-  description: "这是一个插件快速开始模板"
+  homepage: https://wenjing.xin
+  repo: https://github.com/wenjing-xin/plugin-artalk
+  issues: https://github.com/wenjing-xin/plugin-artalk/issues
+  displayName: "plugin-artalk"
+  description: "将 artalk 评论系统集成到 Halo"
   license:
     - name: "GPL-3.0"
       url: "https://github.com/halo-dev/plugin-starter/blob/main/LICENSE"
+  settingName: plugin-artalk-setting
+  configMapName: plugin-artalk-configmap
