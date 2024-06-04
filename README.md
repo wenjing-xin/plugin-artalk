@@ -49,7 +49,7 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 
 QQ交流群与QQ频道，加群后管理员自动审核
 <div>
-&emsp;&emsp;<img src="./docs/QQ.png" width=150px />
+&emsp;&emsp;<img src="./docs/qq.png" width=150px />
 &emsp;&emsp;<img src="./docs/qq频道.jpeg" width=158px />
 </div>
 
