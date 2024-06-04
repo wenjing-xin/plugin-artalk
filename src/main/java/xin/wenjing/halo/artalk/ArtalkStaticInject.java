@@ -44,12 +44,12 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
             if (enableLatex) {
                 return
                     """
-                            <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
-                            <script data-pjax src="https://unpkg.com/katex@0.16.7/dist/katex.min.js"></script>
-                            <link rel="stylesheet" href="%s" />
-                            <script data-pjax src="%s"></script>
-                            <script data-pjax src="https://unpkg.com/@artalk/plugin-katex/dist/artalk-plugin-katex.js"></script>
-                        """.formatted(cssUrl, jsUrl);
+                        <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
+                        <script data-pjax src="/plugins/plugin-artalk/assets/static/katex.min.js"></script>
+                        <link rel="stylesheet" href="%s" />
+                        <script data-pjax src="%s"></script>
+                        <script data-pjax src="/plugins/plugin-artalk/assets/static/artalk-plugin-katex.js"></script>
+                    """.formatted(cssUrl, jsUrl);
             } else {
                 return
                     """
