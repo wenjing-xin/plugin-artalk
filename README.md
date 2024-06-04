@@ -25,7 +25,7 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 - 可自定义 css 样式
 
 ### 3、配置说明
-<img src="./docs/artalk-config.png" width=420px />
+<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/0a7c9784-bb80-4904-82c5-8e0944223bfc" width=420px />
 
 根据配置的提示填写即可，注意在线资源是 artalk 官方提供的一些公共 CDN 资源，要确保自己的 artalk 版本是否和其一致，否则请引入自己搭建的 artalk 服务资源。
 
@@ -40,8 +40,8 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 ### 2、赞助我
 如果你感觉这个插件还不错，请我喝杯咖啡☕️☕️☕️
 <div>
-&emsp;&emsp;<img src="./docs/wxpay.png" width=150px />
-&emsp;&emsp;<img src="./docs/alipay.png" width=150px />
+&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/8787ff4d-eee4-4004-8bc9-b25ef266d154" width=150px />
+&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/cfd7bcf2-0689-4df4-83e1-2413cf32e4c6" width=150px />
 </div>
 
 ### 3、问题反馈
@@ -49,8 +49,8 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 
 QQ交流群与QQ频道，加群后管理员自动审核
 <div>
-&emsp;&emsp;<img src="./docs/QQ.png" width=150px />
-&emsp;&emsp;<img src="./docs/qq频道.jpeg" width=158px />
+&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/033dc281-500f-4158-b43c-f36729ab4a74" width=150px />
+&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/a5dd90d8-5f6b-4435-9b69-4dc2d47cede9" width=158px />
 </div>
 
 ### 4、开发环境
