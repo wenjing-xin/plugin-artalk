@@ -50,7 +50,7 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 QQ交流群与QQ频道，加群后管理员自动审核
 <div>
 &emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/033dc281-500f-4158-b43c-f36729ab4a74" width=150px />
-&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/688d7eb4-530f-433d-a9b0-c8124dc99a3a" width=158px />
+&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/a5dd90d8-5f6b-4435-9b69-4dc2d47cede9" width=158px />
 </div>
 
 ### 4、开发环境
