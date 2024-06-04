@@ -27,7 +27,7 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
         BaseConfig baseConf = settingFetcher.fetch(BaseConfig.GROUP, BaseConfig.class).orElse(new BaseConfig());
         String injectContent = baseConf.isEnableCustomCss() ? customCssResolve(baseConf.getCustomCss()) : normalStatic();
-        String pubInjectContent = pubScriptInject(baseConf.isEnableLatex());
+        String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), baseConf.getCssUrl(), baseConf.getJsUrl());
         final IModelFactory modelFactory = context.getModelFactory();
         return Mono.just(modelFactory.createText(injectContent + pubInjectContent))
             .doOnNext(model::add)
@@ -39,25 +39,26 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
      * @param enableLatex
      * @return
      */
-    private String pubScriptInject(boolean enableLatex){
-        var settings = settingFetcher.get("baseConf");
-        final var jsUrl = settings.get("jsUrl").asText();
-        final var cssUrl = settings.get("cssUrl").asText();
-        if(enableLatex){
-            return
-                """
-                    <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
-                    <script data-pjax src="https://unpkg.com/katex@0.16.7/dist/katex.min.js"></script>
-                    <link rel="stylesheet" href="%s" />
-                    <script data-pjax src="%s"></script>
-                    <script data-pjax src="https://unpkg.com/@artalk/plugin-katex/dist/artalk-plugin-katex.js"></script>
-                """.formatted(cssUrl, jsUrl);
+    private String pubScriptInject(boolean enableLatex, String cssUrl, String jsUrl){
+        if(jsUrl != null && cssUrl !=null) {
+            if (enableLatex) {
+                return
+                    """
+                            <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
+                            <script data-pjax src="https://unpkg.com/katex@0.16.7/dist/katex.min.js"></script>
+                            <link rel="stylesheet" href="%s" />
+                            <script data-pjax src="%s"></script>
+                            <script data-pjax src="https://unpkg.com/@artalk/plugin-katex/dist/artalk-plugin-katex.js"></script>
+                        """.formatted(cssUrl, jsUrl);
+            } else {
+                return
+                    """
+                           <link rel="stylesheet" href="%s">
+                           <script data-pjax src="%s"></script>
+                        """.formatted(cssUrl, jsUrl);
+            }
         }else{
-            return
-                """
-                   <link rel="stylesheet" href="%s">
-                   <script data-pjax src="%s"></script>
-                """.formatted(cssUrl, jsUrl);
+            return null;
         }
     }
 
@@ -134,6 +135,8 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
     @Data
     private static class BaseConfig{
         public static final String GROUP = "baseConf";
+        private String jsUrl;
+        private String cssUrl;
         private boolean enableLatex;
         private boolean enableCustomCss;
         private String customCss;

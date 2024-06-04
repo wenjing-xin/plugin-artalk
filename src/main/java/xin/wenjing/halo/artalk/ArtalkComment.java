@@ -23,14 +23,14 @@ public class ArtalkComment implements CommentWidget {
 
     @Override
     public void render(ITemplateContext context, IProcessableElementTag elementTag, IElementTagStructureHandler iElementTagStructureHandler) {
-
-        var settings = settingFetcher.get("baseConf");
-
-        final var siteTitle = settings.get("siteTitle").asText();
-        final var artalkUrl = settings.get("artalkUrl").asText();
+        SiteConfig siteConfig = settingFetcher.fetch(SiteConfig.GROUP, SiteConfig.class).orElse(new SiteConfig());
+        String siteTitle = siteConfig.getSiteTitle();
+        String artalkUrl = siteConfig.getArtalkUrl();
         final var artalkTmpl = templateResolve();
-
-        iElementTagStructureHandler.replaceWith(artalkTmpl.formatted( artalkUrl, siteTitle, artalkUrl, siteTitle), false);
+        if(siteTitle != null && artalkUrl != null) {
+            iElementTagStructureHandler.replaceWith(
+                artalkTmpl.formatted(artalkUrl, siteTitle, artalkUrl, siteTitle), false);
+        }
     }
 
     private String templateResolve(){
@@ -65,5 +65,12 @@ public class ArtalkComment implements CommentWidget {
             </script>
         """;
         return artalkTmpl;
+    }
+
+    @Data
+    private static class SiteConfig{
+        public static final String GROUP = "baseConf";
+        private String siteTitle;
+        private String artalkUrl;
     }
 }
