@@ -27,10 +27,38 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
         BaseConfig baseConf = settingFetcher.fetch(BaseConfig.GROUP, BaseConfig.class).orElse(new BaseConfig());
         String injectContent = baseConf.isEnableCustomCss() ? customCssResolve(baseConf.getCustomCss()) : normalStatic();
+        String pubInjectContent = pubScriptInject(baseConf.isEnableLatex());
         final IModelFactory modelFactory = context.getModelFactory();
-        return Mono.just(modelFactory.createText(injectContent))
+        return Mono.just(modelFactory.createText(injectContent + pubInjectContent))
             .doOnNext(model::add)
             .then();
+    }
+
+    /**
+     * 判断是否开启数学公式支持
+     * @param enableLatex
+     * @return
+     */
+    private String pubScriptInject(boolean enableLatex){
+        var settings = settingFetcher.get("baseConf");
+        final var jsUrl = settings.get("jsUrl").asText();
+        final var cssUrl = settings.get("cssUrl").asText();
+        if(enableLatex){
+            return
+                """
+                    <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
+                    <script data-pjax src="https://unpkg.com/katex@0.16.7/dist/katex.min.js"></script>
+                    <link rel="stylesheet" href="%s" />
+                    <script data-pjax src="%s"></script>
+                    <script data-pjax src="https://unpkg.com/@artalk/plugin-katex/dist/artalk-plugin-katex.js"></script>
+                """.formatted(cssUrl, jsUrl);
+        }else{
+            return
+                """
+                   <link rel="stylesheet" href="%s">
+                   <script data-pjax src="%s"></script>
+                """.formatted(cssUrl, jsUrl);
+        }
     }
 
     private static String customCssResolve(String cssContent){
@@ -41,7 +69,8 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
             """.formatted(cssContent);
     }
 
-    private static String normalStatic() {
+    private String normalStatic() {
+
         return
             """
                 <style>
@@ -105,8 +134,8 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
     @Data
     private static class BaseConfig{
         public static final String GROUP = "baseConf";
+        private boolean enableLatex;
         private boolean enableCustomCss;
         private String customCss;
     }
-
 }
