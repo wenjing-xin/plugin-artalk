@@ -25,8 +25,7 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 - 可自定义 css 样式
 
 ### 3、配置说明
-<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/0a7c9784-bb80-4904-82c5-8e0944223bfc" width=420px />
-
+![](https://api.minio.yyds.pink/bbs/2024-06-04/1717467151-408267-artalk-config.png)
 根据配置的提示填写即可，注意在线资源是 artalk 官方提供的一些公共 CDN 资源，要确保自己的 artalk 版本是否和其一致，否则请引入自己搭建的 artalk 服务资源。
 
 ## 二、其他
@@ -40,8 +39,7 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 ### 2、赞助我
 如果你感觉这个插件还不错，请我喝杯咖啡☕️☕️☕️
 <div>
-&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/8787ff4d-eee4-4004-8bc9-b25ef266d154" width=150px />
-&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/cfd7bcf2-0689-4df4-83e1-2413cf32e4c6" width=150px />
+&emsp;&emsp;<img src="https://api.minio.yyds.pink/bbs/2024-06-05/1717550152-502697-wxpay.png" width=150px />
 </div>
 
 ### 3、问题反馈
@@ -49,12 +47,16 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 
 QQ交流群与QQ频道，加群后管理员自动审核
 <div>
-&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/033dc281-500f-4158-b43c-f36729ab4a74" width=150px />
-&emsp;&emsp;<img src="https://github.com/wenjing-xin/plugin-artalk/assets/130843859/a5dd90d8-5f6b-4435-9b69-4dc2d47cede9" width=158px />
+&emsp;&emsp;<img src="https://api.minio.yyds.pink/bbs/2024-06-04/1717467713-802505-qq.png" width=150px />
+&emsp;&emsp;<img src="https://api.minio.yyds.pink/bbs/2024-06-04/1717467714-226493-qq.jpg" width=158px />
 </div>
 
 ### 4、开发环境
 
 插件开发的详细文档请查阅：<https://docs.halo.run/developer-guide/plugin/introduction>
 
+### 5、站点
 
+[个人站点](https://blog.wenjing.xin)
+
+[问题反馈论坛](https://support.qq.com/product/651063)
