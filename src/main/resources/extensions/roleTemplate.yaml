@@ -1,0 +1,15 @@
+apiVersion: v1alpha1
+kind: Role
+metadata:
+  name: plugin-artalk-role-view-config
+  labels:
+    halo.run/role-template: "true"
+    rbac.authorization.halo.run/aggregate-to-anonymous: "true"
+  annotations:
+    rbac.authorization.halo.run/module: "Config Management"
+    rbac.authorization.halo.run/display-name: "DataList Manage"
+
+rules:
+  - apiGroups: ["halo.wenjing.xin"]
+    resources: ["artalk"]
+    verbs: ["*"]

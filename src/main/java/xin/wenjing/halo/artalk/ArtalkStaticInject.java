@@ -1,7 +1,6 @@
 package xin.wenjing.halo.artalk;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.IModel;
@@ -10,6 +9,7 @@ import org.thymeleaf.processor.element.IElementModelStructureHandler;
 import reactor.core.publisher.Mono;
 import run.halo.app.plugin.SettingFetcher;
 import run.halo.app.theme.dialect.TemplateHeadProcessor;
+import xin.wenjing.halo.entity.Settings;
 
 /**
  * 功能描述
@@ -18,14 +18,14 @@ import run.halo.app.theme.dialect.TemplateHeadProcessor;
  * @date: 2024年06月03日 18:02
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ArtalkStaticInject implements TemplateHeadProcessor {
 
     private final SettingFetcher settingFetcher;
 
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
-        BaseConfig baseConf = settingFetcher.fetch(BaseConfig.GROUP, BaseConfig.class).orElse(new BaseConfig());
+        Settings baseConf = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
         String injectContent = baseConf.isEnableCustomCss() ? customCssResolve(baseConf.getCustomCss()) : normalStatic();
         String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), baseConf.getCssUrl(), baseConf.getJsUrl());
         final IModelFactory modelFactory = context.getModelFactory();
@@ -132,13 +132,4 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
             """;
     }
 
-    @Data
-    private static class BaseConfig{
-        public static final String GROUP = "baseConf";
-        private String jsUrl;
-        private String cssUrl;
-        private boolean enableLatex;
-        private boolean enableCustomCss;
-        private String customCss;
-    }
 }

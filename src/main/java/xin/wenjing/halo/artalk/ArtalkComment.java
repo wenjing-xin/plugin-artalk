@@ -1,13 +1,13 @@
 package xin.wenjing.halo.artalk;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.IProcessableElementTag;
 import org.thymeleaf.processor.element.IElementTagStructureHandler;
 import run.halo.app.plugin.SettingFetcher;
 import run.halo.app.theme.dialect.CommentWidget;
+import xin.wenjing.halo.entity.Settings;
 
 /**
  * 功能描述
@@ -15,7 +15,7 @@ import run.halo.app.theme.dialect.CommentWidget;
  * @author: dreamChaser
  * @date: 2024年06月03日 16:29
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class ArtalkComment implements CommentWidget {
 
@@ -23,7 +23,7 @@ public class ArtalkComment implements CommentWidget {
 
     @Override
     public void render(ITemplateContext context, IProcessableElementTag elementTag, IElementTagStructureHandler iElementTagStructureHandler) {
-        SiteConfig siteConfig = settingFetcher.fetch(SiteConfig.GROUP, SiteConfig.class).orElse(new SiteConfig());
+        Settings siteConfig = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
         String siteTitle = siteConfig.getSiteTitle();
         String artalkUrl = siteConfig.getArtalkUrl();
         final var artalkTmpl = templateResolve();
@@ -65,12 +65,5 @@ public class ArtalkComment implements CommentWidget {
             </script>
         """;
         return artalkTmpl;
-    }
-
-    @Data
-    private static class SiteConfig{
-        public static final String GROUP = "baseConf";
-        private String siteTitle;
-        private String artalkUrl;
     }
 }
