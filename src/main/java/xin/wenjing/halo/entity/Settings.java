@@ -20,5 +20,4 @@ public class Settings {
     private boolean enableLatex;
     private boolean enableCustomCss;
     private String customCss;
-
 }

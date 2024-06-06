@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>最新评论</title>
+    <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/new_comment.css" />
+</head>
+
+<body>
+    <main class="layout hide-aside" id="content-inner">
+        <div id="page">
+            <div id="about-page">
+                <div class="author-content">
+                    <div class="author-content-item single" id="about-newcomment">
+                        <div class="author-content-item-tips">最近评论</div>
+                        <span class="author-content-item-title">[[${rewardTopTitle}]]</span>
+                        <div class="author-content-item-description">
+                            打造开放共享友好的交流氛围
+                        </div>
+                        <div id="comments-page">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    </div>
+    <script type="text/javascript" data-pjax>
+        comments();
+        async function comments() {
+            fetch("/apis/halo.wenjing.xin/v1alpha1/artalk/listAllComments").then(res => res.json()).then(d => {
+                const artalk = d.data.map(function (e) {
+                    return {
+                        'comment': changeContents(e.content_marked),
+                        'avatar': 'https://cravatar.cn/avatar/' + e.email_encrypted + '?d=mp&s=240',
+                        'nick': e.nick,
+                        'url': e.page_key,
+                        'barrageBlogger': e.email_encrypted,
+                        'id': 'atk-comment-' + e.id,
+                        'created': e.date,
+                    }
+                })
+                renderer(artalk)
+            }).catch((err) => { console.log(err); })
+        }
+        function renderer(data) {
+            let html = "";
+            data.forEach(item => {
+                const a = new Date(item.created),
+                        c = `${a.getFullYear().toString().slice(-2)}-${a.getMonth() + 1}-${a.getDate()} ${a.getHours()}:${a.getMinutes()}:${a.getSeconds()}`;
+                html += `<div class="comment-card" title="${item.comment}">
+                                <div class="comment-info no-lightbox">
+                                    <img src="${item.avatar}" alt='${item.nick}'/>
+                                    <div class="comment-information">
+                                            <span class="comment-user">${item.nick}</span>
+                                            <span class="comment-time">${c}</span>
+                                    </div>
+                                </div>
+                                <div class="comment-content">${item.comment}</div>
+                            </div>`
+            })
+            document.getElementById('comments-page').innerHTML = html
+        }
+        function changeContents(content) {
+            if (content === '') return content
+            content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+            content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+            content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+            content = content.replace(/<[^>]+>/g, "") // remove html tag
+
+            if (content.length > 150) {
+                content = content.substring(0, 150) + '...'
+            }
+            return content
+        }
+    </script>
+</body>
+</html>
