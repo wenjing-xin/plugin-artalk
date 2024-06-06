@@ -28,10 +28,144 @@ halo的主题繁多，由于作者精力有限，无法对所有的主题明暗�
 ![](https://api.minio.yyds.pink/bbs/2024-06-04/1717467151-408267-artalk-config.png)
 根据配置的提示填写即可，注意在线资源是 artalk 官方提供的一些公共 CDN 资源，要确保自己的 artalk 版本是否和其一致，否则请引入自己搭建的 artalk 服务资源。
 
+### 4、主题适配
+目前此插件为主题端提供了 /new_comment 路由，模板为 new_comment.html，也提供了 Finder API，可以将评论渲染到任何地方。
+模板路径：/templates/links.html
+访问路径：/new_comment
+
+#### Finder API
+>`listAllComment()`  获取最近所有评论 
+
+返回一组评论数组，格式如下
+```json
+{
+    "data": [
+        {
+            "id": 5,
+            "content": "φ(￣∇￣o)",
+            "content_marked": "<p>φ(￣∇￣o)</p>\n",
+            "user_id": 1,
+            "nick": "admin",
+            "email_encrypted": "47b2526e562c30463bc62391cb355d71",
+            "link": "",
+            "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+            "date": "2024-06-03 19:02:28",
+            "is_collapsed": false,
+            "is_pending": false,
+            "is_pinned": false,
+            "is_allow_reply": true,
+            "is_verified": true,
+            "rid": 0,
+            "badge_name": "Admin",
+            "badge_color": "#0083FF",
+            "visible": true,
+            "vote_up": 0,
+            "vote_down": 0,
+            "page_key": "/archives/hello-halo",
+            "page_url": "http://localhost:8090/archives/hello-halo",
+            "site_name": "artalk插件测试站点"
+        },
+        {
+            ...
+        }
+    ]
+}
+```
+>`getPageComment(String pageKey)`  获取指定页面的所有评论；
+> 
+> 参数pageKey 为指定页面的唯一标识，详情参考 artalk官方文档的 page_key 描述；
+
+```json
+{
+    "comments": [
+        {
+            "id": 4,
+            "content": "$$\nP(A|B_1, B_2, \\ldots, B_n) = \\frac{P(B_1, B_2, \\ldots, B_n|A) \\cdot P(A)}{P(B_1, B_2, \\ldots, B_n)}\n$$",
+            "content_marked": "<p>$$<br/>\nP(A|B_1, B_2, \\ldots, B_n) = \\frac{P(B_1, B_2, \\ldots, B_n|A) \\cdot P(A)}{P(B_1, B_2, \\ldots, B_n)}<br/>\n$$</p>\n",
+            "user_id": 3,
+            "nick": "test",
+            "email_encrypted": "9ee8b383b932c573f6f501b561246ed7",
+            "link": "",
+            "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+            "date": "2024-06-03 18:40:51",
+            "is_collapsed": false,
+            "is_pending": false,
+            "is_pinned": false,
+            "is_allow_reply": true,
+            "is_verified": false,
+            "rid": 0,
+            "badge_name": "",
+            "badge_color": "",
+            "visible": true,
+            "vote_up": 0,
+            "vote_down": 0,
+            "page_key": "/archives/hello-halo",
+            "page_url": "http://localhost:8090/archives/hello-halo",
+            "site_name": "artalk插件测试站点"
+        },
+        {
+            ...
+        }
+    ],
+    "count": 5,
+    "roots_count": 4,
+    "page": {
+        "id": 2,
+        "admin_only": false,
+        "key": "/archives/hello-halo",
+        "url": "http://localhost:8090/archives/hello-halo",
+        "title": "Hello Halo - Halo",
+        "site_name": "artalk插件测试站点",
+        "vote_up": 0,
+        "vote_down": 0,
+        "pv": 3692
+    }
+}
+```
+
+#### webAPI
+##### 1、获取指定页面的评论
+url: `/apis/halo.wenjing.xin/v1alpha1/artalk/pageKeyComments`;
+
+queryParam: `pageKey=/archives/hello-halo`
+
+result： 返回结果同findersAPI
+
+示例：
+```js
+fetch("/apis/halo.wenjing.xin/v1alpha1/artalk/pageKeyComments?pageKey=/archives/hello-halo")
+        .then(res => res.json()).then(d => {
+            const artalk = d.data.map(function (e) {
+                return {
+                    'comment': changeContents(e.content_marked),
+                    'avatar': 'https://cravatar.cn/avatar/' + e.email_encrypted + '?d=mp&s=240',
+                    'nick': e.nick,
+                    'url': e.page_key,
+                    'barrageBlogger': e.email_encrypted,
+                    'id': 'atk-comment-' + e.id,
+                    'created': e.date,
+                }
+            })
+            renderer(artalk)})
+        .catch((err) => { console.log(err); })
+```
+##### 2、获取最近所有的评论
+
+url: `/apis/halo.wenjing.xin/v1alpha1/artalk/listAllComments`;
+
+result： 返回结果同findersAPI
+
+示例：
+```js
+fetch("/apis/halo.wenjing.xin/v1alpha1/artalk/listAllComments").then(res => res.json()).then(d => {
+                // ......
+     }).catch((err) => { console.log(err); })
+```
+
 ## 二、其他
 
 ### 1、Todo
-
+- [x] 为主题提供finders
 - [ ] 提供一些常见主题的明暗配色模式
 - [ ] 提供对[链接安全跳转中台插件](https://github.com/wenjing-xin/plugins-links-security-detect) 的兼容，使得评论区的链接也可以通过中台进行跳转
 - [ ] 评论系统切换（hexo博客支持双评论系统切换，后续视情况而定）
