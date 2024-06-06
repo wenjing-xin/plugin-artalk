@@ -6,10 +6,10 @@ spec:
   enabled: true
   requires: ">=2.14.0"
   author:
-    name: dreamChaser
+    name: chuyao
     website: https://wenjing.xin
   logo: logo.png
-  homepage: https://wenjing.xin
+  homepage: https://blog.wenjing.xin
   repo: https://github.com/wenjing-xin/plugin-artalk
   issues: https://github.com/wenjing-xin/plugin-artalk/issues
   displayName: "artalk评论区"
