@@ -26,7 +26,17 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
         Settings baseConf = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
-        String injectContent = baseConf.isEnableCustomCss() ? customCssResolve(baseConf.getCustomCss()) : normalStatic();
+        String injectContent = "";
+
+        // 开启明暗模式后自定义css加入
+        if(baseConf.isEnableCustomCss() && baseConf.isEnableLightDark()){
+            injectContent = customCssResolve(baseConf.getCustomCss());
+        }
+        // 明暗模式关闭且没有自定义Css的时候，注入默认样式
+        if(!baseConf.isEnableLightDark() && !baseConf.isEnableCustomCss()){
+            injectContent = normalStatic();
+        }
+
         String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), baseConf.getCssUrl(), baseConf.getJsUrl());
         final IModelFactory modelFactory = context.getModelFactory();
         return Mono.just(modelFactory.createText(injectContent + pubInjectContent))
@@ -45,17 +55,19 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
                 return
                     """
                         <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
+                        <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css" />
                         <script data-pjax src="/plugins/plugin-artalk/assets/static/katex.min.js"></script>
                         <link rel="stylesheet" href="%s" />
                         <script data-pjax src="%s"></script>
-                        <script data-pjax src="/plugins/plugin-artalk/assets/static/artalk-plugin-katex.js"></script>
+                        <script defer src="/plugins/plugin-artalk/assets/static/artalk-plugin-katex.js"></script>
                     """.formatted(cssUrl, jsUrl);
             } else {
                 return
                     """
-                           <link rel="stylesheet" href="%s">
-                           <script data-pjax src="%s"></script>
-                        """.formatted(cssUrl, jsUrl);
+                       <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css" />
+                       <link rel="stylesheet" href="%s">
+                       <script data-pjax src="%s"></script>
+                    """.formatted(cssUrl, jsUrl);
             }
         }else{
             return null;
@@ -70,6 +82,10 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
             """.formatted(cssContent);
     }
 
+    /**
+     * 无明暗模式下的中等样式
+     * @return
+     */
     private String normalStatic() {
 
         return

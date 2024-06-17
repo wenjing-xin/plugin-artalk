@@ -1,0 +1,145 @@
+:root {
+    --atk-secondbg: #dadae1;
+    --at-color-meta: #fff;
+    --at-color-border: #2d3235;
+}
+
+/*artalk 样式修改*/
+.atk-grp-switcher span{
+    padding: 0 .6rem !important;
+}
+
+.atk-comment>.atk-main>.atk-body>.atk-reply-to{
+    border: 1px solid var(--at-color-border) !important;
+    border-radius: 8px;
+}
+.atk-comment>.atk-main>.atk-header .atk-badge{
+    border: var(--style-border-always) !important;
+    padding: 0 8px !important;
+    border-radius: 8px !important;
+    margin-right: 4px !important;
+}
+.artalk pre code {
+    border-radius: 5px;
+}
+.atk-comment-children>.atk-comment-wrap>.atk-comment {
+    padding: 6px !important;
+}
+.atk-comment>.atk-main>.atk-body>.atk-content a:not(.fancybox){
+    background: var(--atk-secondbg);
+    border: var(--style-border-always);
+    padding: 0 8px;
+    border-radius: 8px;
+    display: inline;
+}
+.atk-comment>.atk-main>.atk-body>.atk-content a:not(.fancybox)::after{
+    content: " 🔗";
+}
+.atk-comment>.atk-main>.atk-body>.atk-content img{
+    border-radius: 12px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.atk-sidebar-layer {
+    top: 10%;
+    left: 20%;
+    width: 60%;
+    height: 80%;
+    transform: translateY(120%);
+    border-radius: 12px;
+    padding: 10px 0;
+    background: #FFF;
+}
+
+@media only screen and (max-width: 600px) {
+    .atk-sidebar-layer {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        border-radius: 0
+    }
+}
+
+.atk-layer-wrap .atk-layer-mask {
+    backdrop-filter: blur(10px);
+}
+
+.atk-main-editor>.atk-bottom .atk-plug-btn:not(:last-child) {
+    border-right: 1px solid var(--at-color-border);
+}
+
+.atk-main-editor>.atk-bottom .atk-plug-btn {
+    display: inline-flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.atk-comment>.atk-avatar {
+    width: 48px;
+    height: 48px
+}
+
+.atk-comment>.atk-avatar img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50% !important;
+    transition: all .3s ease;
+}
+.atk-comment>.atk-avatar img:hover {
+    transform: scale(1.2);
+    border-radius: 4px
+}
+
+.atk-comment>.atk-avatar img.error:before {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 3px
+}
+
+.atk-comment>.atk-avatar img.error:after {
+    display: none
+}
+#owo-big p {
+    color: var(--at-color-meta);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    font-size: 12px;
+    margin: 0;
+    margin-top: -14px!important;
+}
+
+/*评论区顶部栏目*/
+div#post-comment {
+    margin-top: .3rem;
+}
+#post-comment .comment-head {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+#post-comment .comment-head .comment-headline {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 15px;
+    padding: 4px;
+}
+#post-comment .comment-head .comment-headline button{
+    border: none;
+    background: none;
+}
+#post-comment .comment-head .comment-headline .switchColor{
+    display: inline-block;
+    padding: 5px;
+}
+#post-comment .comment-head .comment-headline .active-artalk-btn{
+    color: #499EFF;
+    font-size: 16px;
+    font-weight: 560;
+}
+#post-comment .comment-head .comment-randomInfo {
+    margin-left: auto;
+
+}

@@ -66,3 +66,20 @@ spec:
           language: css
           help: 支持css语法样式,无需包裹style标签
           height: 350px
+        - $formkit: radio
+          name: enableLightDark
+          id: enableLightDark
+          key: enableLightDark
+          label: 是否开启评论区明暗切换开关
+          help: 开启后评论区可以进行明暗切换，但和主题的明暗模式是独立的
+          value: false
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: text
+          if: $get(enableLightDark).value
+          name: privacyUrl
+          label: 隐私政策路径
+          value: "/privacy"
