@@ -1,6 +1,7 @@
 package xin.wenjing.halo.artalk;
 
 import lombok.RequiredArgsConstructor;
+import org.pf4j.PluginWrapper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.IModel;
@@ -23,9 +24,12 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
 
     private final SettingFetcher settingFetcher;
 
+    private final PluginWrapper pluginWrapper;
+
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
         Settings baseConf = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
+
         String injectContent = "";
 
         // 开启明暗模式后自定义css加入
@@ -51,23 +55,25 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
      */
     private String pubScriptInject(boolean enableLatex, String cssUrl, String jsUrl){
         if(jsUrl != null && cssUrl !=null) {
+
+            String version = pluginWrapper.getDescriptor().getVersion();
             if (enableLatex) {
                 return
                     """
                         <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
-                        <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css" />
+                        <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css?version=%s" />
                         <script data-pjax src="/plugins/plugin-artalk/assets/static/katex.min.js"></script>
                         <link rel="stylesheet" href="%s" />
                         <script data-pjax src="%s"></script>
                         <script defer src="/plugins/plugin-artalk/assets/static/artalk-plugin-katex.js"></script>
-                    """.formatted(cssUrl, jsUrl);
+                    """.formatted(version, cssUrl, jsUrl);
             } else {
                 return
                     """
-                       <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css" />
+                       <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css?version=%s" />
                        <link rel="stylesheet" href="%s">
                        <script data-pjax src="%s"></script>
-                    """.formatted(cssUrl, jsUrl);
+                    """.formatted(version, cssUrl, jsUrl);
             }
         }else{
             return null;

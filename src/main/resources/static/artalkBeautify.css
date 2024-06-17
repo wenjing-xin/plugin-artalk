@@ -133,6 +133,7 @@ div#post-comment {
 #post-comment .comment-head .comment-headline .switchColor{
     display: inline-block;
     padding: 5px;
+    font-size: 15px;
 }
 #post-comment .comment-head .comment-headline .active-artalk-btn{
     color: #499EFF;
