@@ -8,7 +8,7 @@ import org.thymeleaf.model.IModel;
 import org.thymeleaf.model.IModelFactory;
 import org.thymeleaf.processor.element.IElementModelStructureHandler;
 import reactor.core.publisher.Mono;
-import run.halo.app.plugin.SettingFetcher;
+import run.halo.app.plugin.ReactiveSettingFetcher;
 import run.halo.app.theme.dialect.TemplateHeadProcessor;
 import xin.wenjing.halo.entity.Settings;
 
@@ -22,30 +22,29 @@ import xin.wenjing.halo.entity.Settings;
 @RequiredArgsConstructor
 public class ArtalkStaticInject implements TemplateHeadProcessor {
 
-    private final SettingFetcher settingFetcher;
+    private final ReactiveSettingFetcher settingFetcher;
 
     private final PluginWrapper pluginWrapper;
 
     @Override
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
-        Settings baseConf = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
+        return settingFetcher.fetch(Settings.GROUP, Settings.class)
+            .doOnNext( baseConf ->{
+                String injectContent = "";
 
-        String injectContent = "";
+                // 开启明暗模式后自定义css加入
+                if(baseConf.isEnableCustomCss() && baseConf.isEnableLightDark()){
+                    injectContent = customCssResolve(baseConf.getCustomCss());
+                }
+                // 明暗模式关闭且没有自定义Css的时候，注入默认样式
+                if(!baseConf.isEnableLightDark() && !baseConf.isEnableCustomCss()){
+                    injectContent = normalStatic();
+                }
 
-        // 开启明暗模式后自定义css加入
-        if(baseConf.isEnableCustomCss() && baseConf.isEnableLightDark()){
-            injectContent = customCssResolve(baseConf.getCustomCss());
-        }
-        // 明暗模式关闭且没有自定义Css的时候，注入默认样式
-        if(!baseConf.isEnableLightDark() && !baseConf.isEnableCustomCss()){
-            injectContent = normalStatic();
-        }
-
-        String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), baseConf.getCssUrl(), baseConf.getJsUrl());
-        final IModelFactory modelFactory = context.getModelFactory();
-        return Mono.just(modelFactory.createText(injectContent + pubInjectContent))
-            .doOnNext(model::add)
-            .then();
+                String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), baseConf.getCssUrl(), baseConf.getJsUrl());
+                final IModelFactory modelFactory = context.getModelFactory();
+                model.add(modelFactory.createText(injectContent + pubInjectContent));
+            }).then();
     }
 
     /**
@@ -89,7 +88,7 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
     }
 
     /**
-     * 无明暗模式下的中等样式
+     * 无明暗模式下的中性样式
      * @return
      */
     private String normalStatic() {

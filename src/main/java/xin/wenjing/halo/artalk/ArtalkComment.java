@@ -65,7 +65,7 @@ public class ArtalkComment implements CommentWidget {
                     </div>
                     <div id="artalk-comment"></div>
                 </div>
-                <script type="text/javascript" data-pjax>
+                <script type="text/javascript" data-pjax defer>
                     document.addEventListener("DOMContentLoaded",()=>{
                         if(document.querySelectorAll("#artalk-comment").length){
                             Artalk.init({

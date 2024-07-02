@@ -62,7 +62,7 @@ spec:
           name: customCss
           if: $get(enableCustomCss).value
           label: css样式
-          value:
+          value: a{display:inline-block;}
           language: css
           help: 支持css语法样式,无需包裹style标签
           height: 350px

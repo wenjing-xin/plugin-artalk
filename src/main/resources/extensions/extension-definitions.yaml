@@ -1,0 +1,9 @@
+apiVersion: plugin.halo.run/v1alpha1
+kind: ExtensionDefinition
+metadata:
+  name: artalk-comment
+spec:
+  className: xin.wenjing.halo.artalk.ArtalkComment
+  extensionPointName: comment-widget
+  displayName: "artalk评论组件"
+  description: "由作者 dreamChaser的小屋 提供的第三方评论组件"
