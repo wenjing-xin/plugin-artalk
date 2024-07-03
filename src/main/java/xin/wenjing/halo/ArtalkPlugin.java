@@ -5,13 +5,11 @@ import run.halo.app.plugin.BasePlugin;
 import run.halo.app.plugin.PluginContext;
 
 /**
- * <p>Plugin main class to manage the lifecycle of the plugin.</p>
- * <p>This class must be public and have a public constructor.</p>
- * <p>Only one main class extending {@link BasePlugin} is allowed per plugin.</p>
- *
- * @author guqing
- * @since 1.0.0
- */
+* 功能描述
+* 插件启动入口
+* @author: dreamChaser
+* @date: 2024/7/3 12:54
+*/
 @Component
 public class ArtalkPlugin extends BasePlugin {
 
