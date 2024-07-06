@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import run.halo.app.plugin.SettingFetcher;
 import xin.wenjing.halo.entity.Settings;
 
 /**
@@ -20,8 +19,6 @@ import xin.wenjing.halo.entity.Settings;
 @Slf4j
 public class ArtalkService {
 
-    private final SettingFetcher settingFetcher;
-
     private WebClient webClient;
 
     private Settings pluginSetting;
@@ -30,9 +27,11 @@ public class ArtalkService {
 
     private static final String PAGE_COMMENT = "/api/v2/comments";
 
-    public ArtalkService(SettingFetcher settingFetcher) {
-        this.settingFetcher = settingFetcher;
-        this.pluginSetting = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
+    private final SettingConfigGetter settingConfigGetter;
+
+    public ArtalkService(SettingConfigGetter settingConfigGetter) {
+        this.settingConfigGetter = settingConfigGetter;
+        this.pluginSetting = this.settingConfigGetter.getBasicConfig().blockOptional().orElseThrow();
         this.webClient = WebClient.builder().baseUrl(pluginSetting.getArtalkUrl())
             .defaultHeaders( headers ->{
                     headers.set("Origin", this.pluginSetting.getAuthDomain());
