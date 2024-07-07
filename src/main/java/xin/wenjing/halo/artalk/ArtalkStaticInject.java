@@ -75,7 +75,7 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
                     """.formatted(version, cssUrl, jsUrl);
             }
         }else{
-            return null;
+            return "";
         }
     }
 
