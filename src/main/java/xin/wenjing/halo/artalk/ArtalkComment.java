@@ -66,7 +66,7 @@ public class ArtalkComment implements CommentWidget {
                     <div id="artalk-comment"></div>
                 </div>
                 <script type="text/javascript" data-pjax defer>
-                    document.addEventListener("DOMContentLoaded",()=>{
+                    function initArtalkComment(){
                         if(document.querySelectorAll("#artalk-comment").length){
                             Artalk.init({
                                 el: '#artalk-comment',
@@ -78,43 +78,36 @@ public class ArtalkComment implements CommentWidget {
                                 darkMode: 'auto'
                             })
                         }
+                    }
+                    document.addEventListener("DOMContentLoaded",()=>{
+                        initArtalkComment();
                     });
-                    function setDark(){
-                        Artalk.init({
+                    function getArtalkInstance(){
+                        const artalkInstance = Artalk.init({
                             el: '#artalk-comment',
                             pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
                             pageTitle: "",
                             server: "${artalkUrl}",
                             site:"${siteTitle}",
                             countEl: '#ArtalkCount'
-                        }).setDarkMode(true)
+                        })
+                        return artalkInstance;
+                    }
+                    
+                    function setDark(){
+                        getArtalkInstance().setDarkMode(true)
                         document.getElementById("artalk-dark-btn").classList.add("active-artalk-btn");
                         document.getElementById("artalk-light-btn").classList.remove("active-artalk-btn");
                     }
+                    
                     function setLight(){
-                        Artalk.init({
-                            el: '#artalk-comment',
-                            pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                            pageTitle: "",
-                            server: "${artalkUrl}",
-                            site:"${siteTitle}",
-                            countEl: '#ArtalkCount'
-                        }).setDarkMode(false)
+                        getArtalkInstance().setDarkMode(false)
                         document.getElementById("artalk-light-btn").classList.add("active-artalk-btn");
                         document.getElementById("artalk-dark-btn").classList.remove("active-artalk-btn");
                     }
+                    
                     document.addEventListener("pjax:complete",()=>{
-                        if(document.querySelectorAll("#artalk-comment").length){
-                            Artalk.init({
-                                el: '#artalk-comment',
-                                pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                                pageTitle: "",
-                                server: "${artalkUrl}",
-                                site:"${siteTitle}",
-                                countEl: '#ArtalkCount',
-                                darkMode: 'auto'
-                            })
-                        }
+                        initArtalkComment();
                     })
                 </script>
             """;
@@ -134,7 +127,7 @@ public class ArtalkComment implements CommentWidget {
                     <div id="artalk-comment"></div>
                 </div>
                 <script type="text/javascript" data-pjax>
-                    document.addEventListener("DOMContentLoaded",()=>{
+                    function initArtalk(){
                         if(document.querySelectorAll("#artalk-comment").length){
                             Artalk.init({
                                 el: '#artalk-comment',
@@ -146,19 +139,12 @@ public class ArtalkComment implements CommentWidget {
                                 darkMode: 'auto'
                             })
                         }
+                    }
+                    document.addEventListener("DOMContentLoaded",()=>{
+                        initArtalk();
                     });
                     document.addEventListener("pjax:complete",()=>{
-                        if(document.querySelectorAll("#artalk-comment").length){
-                            Artalk.init({
-                                el: '#artalk-comment',
-                                pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                                pageTitle: "",
-                                server: "${artalkUrl}",
-                                site:"${siteTitle}",
-                                countEl: '#ArtalkCount',
-                                darkMode: 'auto'
-                            })
-                        }
+                        initArtalk();
                     })
                 </script>
             """;
