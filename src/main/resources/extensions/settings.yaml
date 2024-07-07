@@ -12,6 +12,7 @@ spec:
           label: 站点名称
           value: "default site"
           help: 和artalk里边配置的站点名称一致即可
+          validation: required
         - $formkit: url
           name: authDomain
           label: artalk添加的可信域名
@@ -20,20 +21,8 @@ spec:
         - $formkit: url
           name: artalkUrl
           label: artalk 部署地址
-          value:
+          value: "https://artalk.domain.com"
           help: 例如https://artalk.domain.com,注意不要带/
-          validation: required
-        - $formkit: url
-          name: jsUrl
-          label: artalk的js资源地址
-          value:
-          help: 使用在线的js资源是最新版本的(如果你使用的不是最新版本请引入自己的js文件)
-          validation: required
-        - $formkit: url
-          name: cssUrl
-          label: artalk的css资源地址
-          value:
-          help: 使用在线的css资源是最新版本的(如果你使用的不是最新版本请引入自己的css文件)
           validation: required
         - $formkit: radio
           name: enableLatex

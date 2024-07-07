@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * 功能描述
- *
+ * 插件配置
  * @author: dreamChaser
  * @date: 2024年06月05日 15:00
  */
@@ -15,8 +15,6 @@ public class Settings {
     private String siteTitle;
     private String authDomain;
     private String artalkUrl;
-    private String jsUrl;
-    private String cssUrl;
     private boolean enableLatex;
     private boolean enableCustomCss;
     private String customCss;

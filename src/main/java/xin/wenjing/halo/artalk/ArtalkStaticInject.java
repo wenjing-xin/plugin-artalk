@@ -40,8 +40,9 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
                 if(!baseConf.isEnableLightDark() && !baseConf.isEnableCustomCss()){
                     injectContent = normalStatic();
                 }
-
-                String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), baseConf.getCssUrl(), baseConf.getJsUrl());
+                String jsUrl = baseConf.getArtalkUrl() + "/dist/Artalk.js";
+                String cssUrl = baseConf.getArtalkUrl() + "/dist/Artalk.css";
+                String pubInjectContent = pubScriptInject(baseConf.isEnableLatex(), cssUrl, jsUrl);
                 final IModelFactory modelFactory = context.getModelFactory();
                 model.add(modelFactory.createText(injectContent + pubInjectContent));
             }).then();
@@ -53,29 +54,24 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
      * @return
      */
     private String pubScriptInject(boolean enableLatex, String cssUrl, String jsUrl){
-        if(jsUrl != null && cssUrl !=null) {
-
-            String version = pluginContext.getVersion();
-            if (enableLatex) {
-                return
-                    """
-                        <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
-                        <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css?version=%s" />
-                        <script data-pjax src="/plugins/plugin-artalk/assets/static/katex.min.js"></script>
-                        <link rel="stylesheet" href="%s" />
-                        <script data-pjax src="%s"></script>
-                        <script defer src="/plugins/plugin-artalk/assets/static/artalk-plugin-katex.js"></script>
-                    """.formatted(version, cssUrl, jsUrl);
-            } else {
-                return
-                    """
-                       <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css?version=%s" />
-                       <link rel="stylesheet" href="%s">
-                       <script data-pjax src="%s"></script>
-                    """.formatted(version, cssUrl, jsUrl);
-            }
-        }else{
-            return "";
+        String version = pluginContext.getVersion();
+        if (enableLatex) {
+            return
+                """
+                    <link rel="stylesheet" href="https://unpkg.com/katex@0.16.7/dist/katex.min.css" />
+                    <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css?version=%s" />
+                    <script data-pjax src="/plugins/plugin-artalk/assets/static/katex.min.js"></script>
+                    <link rel="stylesheet" href="%s" />
+                    <script data-pjax src="%s"></script>
+                    <script defer src="/plugins/plugin-artalk/assets/static/artalk-plugin-katex.js"></script>
+                """.formatted(version, cssUrl, jsUrl);
+        } else {
+            return
+                """
+                   <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/artalkBeautify.css?version=%s" />
+                   <link rel="stylesheet" href="%s">
+                   <script data-pjax src="%s"></script>
+                """.formatted(version, cssUrl, jsUrl);
         }
     }
 
