@@ -6,9 +6,8 @@ import org.springframework.util.PropertyPlaceholderHelper;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.IProcessableElementTag;
 import org.thymeleaf.processor.element.IElementTagStructureHandler;
-import run.halo.app.plugin.SettingFetcher;
 import run.halo.app.theme.dialect.CommentWidget;
-import xin.wenjing.halo.entity.Settings;
+import xin.wenjing.halo.service.SettingConfigGetter;
 import java.util.Properties;
 
 /**
@@ -21,17 +20,18 @@ import java.util.Properties;
 @Component
 public class ArtalkComment implements CommentWidget {
 
-    private final SettingFetcher settingFetcher;
-
     static final PropertyPlaceholderHelper PROPERTY_PLACEHOLDER_HELPER = new PropertyPlaceholderHelper("${", "}");
+
+    private final SettingConfigGetter settingConfigGetter;
 
     @Override
     public void render(ITemplateContext context, IProcessableElementTag elementTag, IElementTagStructureHandler iElementTagStructureHandler) {
 
-        Settings siteConfig = settingFetcher.fetch(Settings.GROUP, Settings.class).orElse(new Settings());
-        String siteTitle = siteConfig.getSiteTitle();
-        String artalkUrl = siteConfig.getArtalkUrl();
-        String privacyUrl = siteConfig.getPrivacyUrl();
+        var siteConfig = settingConfigGetter.getBasicConfig().blockOptional().orElseThrow();
+
+        String siteTitle = String.valueOf(siteConfig.getSiteTitle());
+        String artalkUrl = String.valueOf(siteConfig.getArtalkUrl());
+        String privacyUrl = String.valueOf(siteConfig.getPrivacyUrl());
 
         final var ldArtalkTmpl = ldTemplateResolve(siteTitle, artalkUrl, privacyUrl);
         final var normalArtalkTmpl = normalTemplateResolve(siteTitle, artalkUrl, privacyUrl);

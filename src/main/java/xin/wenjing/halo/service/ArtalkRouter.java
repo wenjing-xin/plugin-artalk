@@ -28,11 +28,11 @@ public class ArtalkRouter {
     private final TemplateNameResolver templateNameResolver;
 
     @Bean
-    RouterFunction<ServerResponse> momentRouterFunction() {
-        return RouterFunctions.route().GET("/new_comment",this::renderMomentPage).build();
+    RouterFunction<ServerResponse> artalkRouterFunction() {
+        return RouterFunctions.route().GET("/new_comment",this::renderCommentPage).build();
     }
 
-    Mono<ServerResponse> renderMomentPage(ServerRequest request) {
+    Mono<ServerResponse> renderCommentPage(ServerRequest request) {
         var model = new HashMap<String, Object>();
         model.put("new_comment", List.of());
         return templateNameResolver.resolveTemplateNameOrDefault(request.exchange(), "new_comment")

@@ -10,7 +10,7 @@ spec:
         - $formkit: text
           name: siteTitle
           label: 站点名称
-          value:
+          value: "default site"
           help: 和artalk里边配置的站点名称一致即可
         - $formkit: url
           name: authDomain
