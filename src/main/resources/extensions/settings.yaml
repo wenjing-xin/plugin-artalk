@@ -55,6 +55,11 @@ spec:
           language: css
           help: 支持css语法样式,无需包裹style标签
           height: 350px
+        - $formkit: text
+          name: setDarkModeAttribute
+          label: 暗黑模式适配
+          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：html[data-theme="dark"]；设置 'auto' 会根据设备暗黑模式自适应
+          value: "auto"
         - $formkit: radio
           name: enableLightDark
           id: enableLightDark

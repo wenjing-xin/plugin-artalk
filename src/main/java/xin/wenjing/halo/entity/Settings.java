@@ -18,6 +18,7 @@ public class Settings {
     private boolean enableLatex;
     private boolean enableCustomCss;
     private String customCss;
+    private String setDarkModeAttribute;
     private boolean enableLightDark;
     private String privacyUrl;
 }

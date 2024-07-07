@@ -32,8 +32,9 @@ public class ArtalkComment implements CommentWidget {
         String siteTitle = String.valueOf(siteConfig.getSiteTitle());
         String artalkUrl = String.valueOf(siteConfig.getArtalkUrl());
         String privacyUrl = String.valueOf(siteConfig.getPrivacyUrl());
+        String darkModeAttribute = String.valueOf(siteConfig.getSetDarkModeAttribute());
 
-        final var ldArtalkTmpl = ldTemplateResolve(siteTitle, artalkUrl, privacyUrl);
+        final var ldArtalkTmpl = ldTemplateResolve(siteTitle, artalkUrl, privacyUrl, darkModeAttribute);
         final var normalArtalkTmpl = normalTemplateResolve(siteTitle, artalkUrl, privacyUrl);
 
         if(siteTitle != null && artalkUrl != null) {
@@ -45,11 +46,19 @@ public class ArtalkComment implements CommentWidget {
         }
     }
 
-    private String ldTemplateResolve(String siteTitle, String artalkUrl, String privacyUrl){
+    private String ldTemplateResolve(String siteTitle, String artalkUrl, String privacyUrl, String darkModeAttribute){
         final Properties properties = new Properties();
         properties.setProperty("siteTitle", siteTitle);
         properties.setProperty("artalkUrl", artalkUrl);
         properties.setProperty("privacy", privacyUrl);
+        if(darkModeAttribute.equals("auto")){
+            properties.setProperty("dataTheme", "prefers-color-scheme");
+            properties.setProperty("dataThemeName", "dark");
+        }else{
+            properties.setProperty("dataTheme", darkModeAttribute.split("=")[0]);
+            properties.setProperty("dataThemeName", darkModeAttribute.split("=")[1]);
+        }
+
 
         // 同时兼容使用pjax的主题和未使用pjax的主题
         final var artalkTmpl = """
@@ -68,40 +77,42 @@ public class ArtalkComment implements CommentWidget {
                 <script type="text/javascript" data-pjax defer>
                     function initArtalkComment(){
                         if(document.querySelectorAll("#artalk-comment").length){
-                            Artalk.init({
+                            window.artalkItem = Artalk.init({
                                 el: '#artalk-comment',
                                 pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
                                 pageTitle: "",
                                 server: "${artalkUrl}",
                                 site:"${siteTitle}",
                                 countEl: '#ArtalkCount',
-                                darkMode: 'auto'
+                                dark: "auto"
+                            })
+                            window.artalkItem.on("created", ()=>{
+                                console.log("监听事件出发--外层")
+                                setDarkMode();
                             })
                         }
                     }
                     document.addEventListener("DOMContentLoaded",()=>{
                         initArtalkComment();
                     });
-                    function getArtalkInstance(){
-                        const artalkInstance = Artalk.init({
-                            el: '#artalk-comment',
-                            pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                            pageTitle: "",
-                            server: "${artalkUrl}",
-                            site:"${siteTitle}",
-                            countEl: '#ArtalkCount'
-                        })
-                        return artalkInstance;
+                    
+                    function setDarkMode() {
+                        if (typeof window.artalkItem !== 'object') return;
+                        let isDark = document.documentElement.getAttribute('${dataTheme}') == '${dataThemeName}'
+                        window.artalkItem.setDarkMode(isDark)
+                        console.log("监听事件出发", document.documentElement.getAttribute('${dataTheme}'))
                     }
                     
                     function setDark(){
-                        getArtalkInstance().setDarkMode(true)
+                        if (typeof window.artalkItem !== 'object') return
+                        window.artalkItem.setDarkMode(true)
                         document.getElementById("artalk-dark-btn").classList.add("active-artalk-btn");
                         document.getElementById("artalk-light-btn").classList.remove("active-artalk-btn");
                     }
                     
                     function setLight(){
-                        getArtalkInstance().setDarkMode(false)
+                        if (typeof window.artalkItem !== 'object') return;
+                        window.artalkItem.setDarkMode(false)
                         document.getElementById("artalk-light-btn").classList.add("active-artalk-btn");
                         document.getElementById("artalk-dark-btn").classList.remove("active-artalk-btn");
                     }
