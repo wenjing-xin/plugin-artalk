@@ -119,6 +119,7 @@ div#post-comment {
     margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 #post-comment .comment-head .comment-headline {
     display: inline-block;
@@ -130,20 +131,64 @@ div#post-comment {
     border: none;
     background: none;
 }
-#post-comment .comment-head .comment-headline .switchColor{
-    display: inline-block;
-    padding: 5px;
-    font-size: 15px;
-}
+
 #post-comment .comment-head .comment-headline .active-artalk-btn{
-    color: #499EFF;
+    color: #FF8700;
     font-size: 16px;
     font-weight: 560;
 }
-#post-comment .comment-head .comment-randomInfo {
-    margin-left: auto;
+
+/*明暗切换按钮*/
+.artalk-switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 28px;
 
 }
+
+.artalk-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.artalk-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
+    border-radius: 18px;
+    background: linear-gradient(to right, #8983f7, #a3dafb);
+}
+
+.artalk-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    left: 4px;
+    bottom: 3px;
+    transition: 0.4s;
+    background-color: white;
+}
+
+.artalk-switch input:checked + .slider {
+    background: linear-gradient(to right, #ff8c00, #ff0080);
+    transition: 0.4s;
+}
+
+.artalk-switch input:checked + .slider:before {
+    background: #ff8c00;
+    transform: translateX(41px);
+    transition: 0.4s;
+}
+
+
 
 
 

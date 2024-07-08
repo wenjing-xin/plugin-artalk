@@ -32,12 +32,12 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
             .doOnNext( baseConf ->{
                 String injectContent = "";
 
-                // 开启明暗模式后自定义css加入
-                if(baseConf.isEnableCustomCss() && baseConf.isEnableLightDark()){
+                // 开启明暗模式(独立切换)后且有自定义加入自定义css
+                if(baseConf.isEnableCustomCss()){
                     injectContent = customCssResolve(baseConf.getCustomCss());
                 }
                 // 明暗模式关闭且没有自定义Css的时候，注入默认样式
-                if(!baseConf.isEnableLightDark() && !baseConf.isEnableCustomCss()){
+                if(baseConf.getEnableLightDark().equals("disable") && !baseConf.isEnableCustomCss()){
                     injectContent = normalStatic();
                 }
                 String jsUrl = baseConf.getArtalkUrl() + "/dist/Artalk.js";

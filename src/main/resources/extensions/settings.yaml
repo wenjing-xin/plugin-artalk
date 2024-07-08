@@ -55,25 +55,23 @@ spec:
           language: css
           help: 支持css语法样式,无需包裹style标签
           height: 350px
-        - $formkit: text
-          name: setDarkModeAttribute
-          label: 暗黑模式适配
-          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：html[data-theme="dark"]；设置 'auto' 会根据设备暗黑模式自适应
-          value: "auto"
-        - $formkit: radio
+        - $formkit: select
           name: enableLightDark
           id: enableLightDark
           key: enableLightDark
-          label: 是否开启评论区明暗切换开关
-          help: 开启后评论区可以进行明暗切换，但和主题的明暗模式是独立的
+          label: 暗黑模式适配
+          help: 明暗切换属性选择器是自动会根据主题的暗黑模式进行切换，但需要主题有对应的选择器，目前绝多大数的明暗切换都是根据选择器的变化进行切换的，如果不是此类方式的明暗切换，请选择独立切换
           value: false
           options:
-            - value: true
-              label: 开启
-            - value: false
-              label: 关闭
+            - value: attribute
+              label: 明暗切换属性选择器
+            - value: single
+              label: 独立切换
+            - value: disable
+              label: 禁用（明暗模式下的中性色，不是很美观，但内容清晰可见）
         - $formkit: text
-          if: $get(enableLightDark).value
-          name: privacyUrl
-          label: 隐私政策路径
-          value: "/privacy"
+          if: $get(enableLightDark).value == attribute
+          name: darkModeAttribute
+          label: 选择器名称(严格按照说明的示例格式填写)
+          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；joe3主题的明暗切换选择器为data-mode=dark，设置 'auto' 会根据设备暗黑模式自适应
+          value: "auto"
