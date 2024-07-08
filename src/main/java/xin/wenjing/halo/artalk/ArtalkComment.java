@@ -152,8 +152,10 @@ public class ArtalkComment implements CommentWidget {
                                     }
                                 });
                                 const targetNode = document.querySelector('[${dataTheme}]');
-                                const config = { attributes: true, childList: false, subtree: false };
-                                observer.observe(targetNode, config);
+                                if(targetNode){
+                                    const config = { attributes: true, childList: false, subtree: false };
+                                    observer.observe(targetNode, config);
+                                }
                             })
                         }
                     }
