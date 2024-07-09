@@ -73,5 +73,5 @@ spec:
           if: $get(enableLightDark).value == attribute
           name: darkModeAttribute
           label: 选择器名称(严格按照说明的示例格式填写)
-          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；joe3主题的明暗切换选择器为data-mode=dark，设置 'auto' 会根据设备暗黑模式自适应
-          value: "auto"
+          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；joe3主题的明暗切换选择器为data-mode=dark，可以在控制台的html或body元素上查看该属性
+          value: "data-theme=dark"

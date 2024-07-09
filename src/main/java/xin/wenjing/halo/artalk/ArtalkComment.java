@@ -112,15 +112,8 @@ public class ArtalkComment implements CommentWidget {
         final Properties properties = new Properties();
         properties.setProperty("siteTitle", siteTitle);
         properties.setProperty("artalkUrl", artalkUrl);
-
-        if(darkModeAttribute.equals("auto")){
-            // 根据设备切换
-            properties.setProperty("dataTheme", "prefers-color-scheme");
-            properties.setProperty("dataThemeName", "dark");
-        }else{
-            properties.setProperty("dataTheme", darkModeAttribute.split("=")[0]);
-            properties.setProperty("dataThemeName", darkModeAttribute.split("=")[1]);
-        }
+        properties.setProperty("dataTheme", darkModeAttribute.split("=")[0]);
+        properties.setProperty("dataThemeName", darkModeAttribute.split("=")[1]);
 
         // 同时兼容使用pjax的主题和未使用pjax的主题
         final var artalkTmpl = """
