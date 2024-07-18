@@ -79,3 +79,16 @@ spec:
           label: 选择器名称(严格按照说明的示例格式填写)
           help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；joe3主题的明暗切换选择器为data-mode=dark，可以在控制台的html或body元素上查看该属性
           value: "data-theme=dark"
+        - $formkit: radio
+          id: adaptLsdPlugin
+          key: adaptLsdPlugin
+          name: adaptLsdPlugin
+          label: 是否开启评论区链接跳转中台
+          value: false
+          help: 使用该功能前需要配合插件plugin-link-security-detect，下载地址：https://blog.wenjing.xin/docs/halo-plugins/lsd-plugin/introduce
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+

@@ -6,6 +6,7 @@ import org.springframework.util.PropertyPlaceholderHelper;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.IProcessableElementTag;
 import org.thymeleaf.processor.element.IElementTagStructureHandler;
+import run.halo.app.plugin.PluginContext;
 import run.halo.app.theme.dialect.CommentWidget;
 import xin.wenjing.halo.service.SettingConfigGetter;
 import java.util.Properties;
@@ -20,6 +21,8 @@ import java.util.Properties;
 @Component
 public class ArtalkComment implements CommentWidget {
 
+    private final PluginContext pluginContext;
+
     static final PropertyPlaceholderHelper PROPERTY_PLACEHOLDER_HELPER = new PropertyPlaceholderHelper("${", "}");
 
     private final SettingConfigGetter settingConfigGetter;
@@ -32,6 +35,11 @@ public class ArtalkComment implements CommentWidget {
         String siteTitle = String.valueOf(siteConfig.getSiteTitle());
         String artalkUrl = String.valueOf(siteConfig.getArtalkUrl());
 
+        String linkJump = "";
+        if(Boolean.valueOf(siteConfig.isAdaptLsdPlugin())){
+            linkJump = adaptLinkJump();
+        }
+
         if(siteTitle != null && artalkUrl != null) {
             if(siteConfig.getEnableLightDark().equals("attribute") || siteConfig.getEnableLightDark().equals("elementClassName")){
                 // 明暗属性选择器切换
@@ -42,13 +50,13 @@ public class ArtalkComment implements CommentWidget {
                 }else{
                     finalTmpl = normalTemplateResolve(siteTitle, artalkUrl, darkModeAttribute, "attribute");
                 }
-                iElementTagStructureHandler.replaceWith(finalTmpl, false);
+                iElementTagStructureHandler.replaceWith(finalTmpl + linkJump, false);
             }else if(siteConfig.getEnableLightDark().equals("single")){
                 // 独立明暗模式切换
                 final var ldArtalkTmpl = ldTemplateResolve(siteTitle, artalkUrl);
-                iElementTagStructureHandler.replaceWith(ldArtalkTmpl, false);
+                iElementTagStructureHandler.replaceWith(ldArtalkTmpl + linkJump, false);
             }else{
-                iElementTagStructureHandler.replaceWith(moderateTemplateResolve(siteTitle, artalkUrl), false);
+                iElementTagStructureHandler.replaceWith(moderateTemplateResolve(siteTitle, artalkUrl) + linkJump, false);
             }
         }
     }
@@ -185,7 +193,6 @@ public class ArtalkComment implements CommentWidget {
         return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(artalkTmpl, properties);
     }
 
-
     private String moderateTemplateResolve(String siteTitle, String artalkUrl){
 
         final Properties properties = new Properties();
@@ -220,6 +227,25 @@ public class ArtalkComment implements CommentWidget {
                 </script>
             """;
         return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(artalkTmpl, properties);
+    }
+
+    public String adaptLinkJump(){
+        String version = pluginContext.getVersion();
+        //请求链接管理插件数据
+        final Properties properties = new Properties();
+        properties.setProperty("version", version);
+        final var script = """
+            <script data-pjax src="/plugins/plugin-artalk/assets/static/commentLinkScan.js?v=${version}"></script>
+            <script type="text/javascript" data-pjax>
+                document.addEventListener("DOMContentLoaded",()=>{
+                     new commentLinkScan();
+                });
+                document.addEventListener("pjax:complete",()=>{
+                    new commentLinkScan();
+                })
+            </script>
+            """;
+        return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(script, properties);
     }
 
 }

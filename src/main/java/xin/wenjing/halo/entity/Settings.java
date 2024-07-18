@@ -20,4 +20,5 @@ public class Settings {
     private String customCss;
     private String darkModeAttribute;
     private String enableLightDark;
+    private boolean adaptLsdPlugin;
 }
