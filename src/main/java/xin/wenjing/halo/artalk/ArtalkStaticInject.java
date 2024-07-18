@@ -88,65 +88,11 @@ public class ArtalkStaticInject implements TemplateHeadProcessor {
      * @return
      */
     private String normalStatic() {
-
+        String version = pluginContext.getVersion();
         return
             """
-                <style>
-                   .atk-main-editor{
-                        border: none !important;
-                   }
-                   .atk-grp-switcher span{
-                       padding: 0 .4rem !important;
-                       text-align: center;
-                   }
-                   .atk-main-editor {
-                       background: #DFE3EB !important;
-                   }
-                   .atk-main-editor>.atk-textarea-wrap {
-                       background: #DFE3EB !important;
-                   }
-                   .atk-main-editor>.atk-textarea-wrap .atk-textarea{
-                       background: #DFE3EB !important;
-                       color: #606266 !important;
-                   }
-                   .atk-editor-plug-emoticons>.atk-grp-switcher{
-                        background: #DFE3EB !important;
-                   }
-                   .artalk>.atk-list>.atk-list-header .atk-comment-count{
-                        color: #909399 !important;
-                   }
-                   .atk-comment>.atk-main>.atk-body>.atk-content{
-                        color: #606266;
-                   }
-                   .atk-comment>.atk-main>.atk-footer .atk-actions>span {
-                        color: #909399 !important;
-                   }
-                   .atk-comment>.atk-main>.atk-header .atk-item{
-                        color: #606266 !important;
-                   }
-                   .atk-main-editor>.atk-plug-panel-wrap{
-                        border: none !important;
-                   }
-                   .atk-editor-plug-emoticons>.atk-grp-switcher{
-                         border: none !important;
-                   }
-                   .atk-editor-plug-emoticons>.atk-grp-wrap>.atk-grp{
-                        color: #606266 !important;
-                   }
-                   .atk-main-editor>.atk-header{
-                        color: #606266 !important;
-                   }
-                   .artalk>.atk-list>.atk-list-footer .atk-copyright{
-                        color: #606266 !important;
-                   }
-                   .atk-editor-plug-preview{
-                        color: #606266;
-                   }
-                   .artalk>.atk-list>.atk-list-header .atk-right-action>span{
-                        color: #F56C6C !important;
-                   }
-                </style>
-            """;
+                <link rel="stylesheet" href="/plugins/plugin-artalk/assets/static/normalStatic.css?version=%s" />
+            """.formatted(version);
     }
 
 }
