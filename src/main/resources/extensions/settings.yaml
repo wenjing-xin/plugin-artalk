@@ -61,16 +61,20 @@ spec:
           key: enableLightDark
           label: 暗黑模式适配
           help: 明暗切换属性选择器是自动会根据主题的暗黑模式进行切换，但需要主题有对应的选择器，目前绝多大数的明暗切换都是根据选择器的变化进行切换的，如果不是此类方式的明暗切换，请选择独立切换
-          value: false
+          value: disable
           options:
             - value: attribute
               label: 明暗切换属性选择器
+            - value: elementClassName
+              label: 元素类名明暗切换
             - value: single
               label: 独立切换
             - value: disable
               label: 禁用（明暗模式下的中性色，不是很美观，但内容清晰可见）
         - $formkit: text
-          if: $get(enableLightDark).value == attribute
+          if: $get(enableLightDark).value == attribute || $get(enableLightDark).value == elementClassName
+          id: darkModeAttribute
+          key: darkModeAttribute
           name: darkModeAttribute
           label: 选择器名称(严格按照说明的示例格式填写)
           help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；joe3主题的明暗切换选择器为data-mode=dark，可以在控制台的html或body元素上查看该属性
