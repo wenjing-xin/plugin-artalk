@@ -28,13 +28,16 @@ Halo-V2.17.0及其以上版本使用该插件的时候，请勾选后台中的�
 
 部分主题的明暗属性选择器如下：
 
-|       主题名称        |                   暗色模式选择器                    |
-|:-----------------:|:--------------------------------------------:|
-|  halo-theme-hao   |               data-theme=dark                |
-|  halo-theme-Joe3  |                data-mode=dark                |
-| walker | data-theme=dracula 或者 data-color-scheme=dark |
-| Butterfly |               data-theme=dark                |
-|Theme-Stack|               data-scheme=dark               |
+|        主题名称         |                   暗色模式选择器                    |
+|:-------------------:|:--------------------------------------------:|
+|   halo-theme-hao    |               data-theme=dark                |
+|   halo-theme-Joe3   |                data-mode=dark                |
+|       walker        | data-theme=dracula 或者 data-color-scheme=dark |
+|      Butterfly      |               data-theme=dark                |
+|     Theme-Stack     |               data-scheme=dark               |
+|        默认主题         |                  html=dark                   |
+|       Sakura        |                  body=dark                  |
+| halo-theme-dream2.0 |   html=night    |
 
 
 #### 1.3 halo-theme-hao 主题使用说明
@@ -112,9 +115,12 @@ services:
 networks:
     halo_network:
 ```
+如果无法自行解决配置的一些相关问题，请参考文章：https://blog.wenjing.xin/archives/DV1kKzJX
 
 ![](https://api.minio.yyds.pink/bbs/2024-06-04/1717467151-408267-artalk-config.png)
 根据配置的提示填写即可，注意在线资源是 artalk 官方提供的一些公共 CDN 资源，要确保自己的 artalk 版本是否和其一致，否则请引入自己搭建的 artalk 服务资源。
+
+V1.3.0 之后只需要填写 artalk 的部署地址即可自动获取 js 和 css 资源地址。
 
 ### 4、主题适配
 目前此插件为主题端提供了 /new_comment 路由，模板为 `new_comment.html`，也提供了 Finder API，可以将评论渲染到任何地方。
@@ -254,8 +260,8 @@ fetch("/apis/halo.wenjing.xin/v1alpha1/artalk/listAllComments").then(res => res.
 
 ### 1、Todo
 - [x] 为主题提供finders
-- [ ] 提供一些常见主题的明暗配色模式
-- [ ] 提供对[链接安全跳转中台插件](https://github.com/wenjing-xin/plugins-links-security-detect) 的兼容，使得评论区的链接也可以通过中台进行跳转
+- [X] 提供一些常见主题的明暗配色模式
+- [X] 提供对[链接安全跳转中台插件](https://github.com/wenjing-xin/plugins-links-security-detect) 的兼容，使得评论区的链接也可以通过中台进行跳转
 - [ ] 评论系统切换（hexo博客支持双评论系统切换，后续视情况而定）
 
 ### 2、赞助我
