@@ -11,7 +11,6 @@
             let aTagLists = document.querySelectorAll("#artalk-comment a");
             if(aTagLists.length){
                 aTagLists.forEach(linkItem => {
-                    console.log(linkItem)
                     if(linkItem.href.indexOf("/jumpGo") == -1) {
                         let checkDomain = urlDomainReg.exec(linkItem.href)[0];
                         if (linkItem.getAttribute("type") == "download") {

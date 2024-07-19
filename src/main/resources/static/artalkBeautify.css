@@ -142,9 +142,8 @@ div#post-comment {
 .artalk-switch {
     position: relative;
     display: inline-block;
-    width: 70px;
-    height: 28px;
-
+    width: 55px;
+    height: 22px;
 }
 
 .artalk-switch input {
@@ -168,8 +167,8 @@ div#post-comment {
 .artalk-switch .slider:before {
     position: absolute;
     content: "";
-    height: 22px;
-    width: 22px;
+    height: 17px;
+    width: 17px;
     border-radius: 50%;
     left: 4px;
     bottom: 3px;
@@ -184,7 +183,7 @@ div#post-comment {
 
 .artalk-switch input:checked + .slider:before {
     background: #ff8c00;
-    transform: translateX(41px);
+    transform: translateX(30px);
     transition: 0.4s;
 }
 

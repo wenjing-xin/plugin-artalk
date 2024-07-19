@@ -60,7 +60,7 @@ spec:
           id: enableLightDark
           key: enableLightDark
           label: 暗黑模式适配
-          help: 明暗切换属性选择器是自动会根据主题的暗黑模式进行切换，但需要主题有对应的选择器，目前绝多大数的明暗切换都是根据选择器的变化进行切换的，如果不是此类方式的明暗切换，请选择独立切换
+          help: 明暗切换属性选择器是自动会根据主题的暗黑模式进行切换，但需要主题有对应的选择器后或者类名进行切换，目前绝多大数的明暗切换都是根据选择器的变化进行切换的，如果不是此类方式的明暗切换，请选择独立切换
           value: disable
           options:
             - value: attribute
@@ -77,7 +77,7 @@ spec:
           key: darkModeAttribute
           name: darkModeAttribute
           label: 选择器名称(严格按照说明的示例格式填写)
-          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；joe3主题的明暗切换选择器为data-mode=dark，可以在控制台的html或body元素上查看该属性
+          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；默认主题的暗色切换选择器为html=dark，可以在控制台的html或body元素上查看该属性
           value: "data-theme=dark"
         - $formkit: radio
           id: adaptLsdPlugin
@@ -91,4 +91,3 @@ spec:
               label: 开启
             - value: false
               label: 关闭
-
