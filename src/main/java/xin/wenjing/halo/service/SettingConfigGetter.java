@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import run.halo.app.plugin.ReactiveSettingFetcher;
+import xin.wenjing.halo.entity.AdvanceSettings;
 import xin.wenjing.halo.entity.Settings;
 
 /**
@@ -21,4 +22,10 @@ public class SettingConfigGetter {
         return settingFetcher.fetch(Settings.GROUP, Settings.class)
             .defaultIfEmpty(new Settings());
     }
+
+    public Mono<AdvanceSettings> getAdvanceConfig() {
+        return settingFetcher.fetch(AdvanceSettings.GROUP, AdvanceSettings.class)
+            .defaultIfEmpty(new AdvanceSettings());
+    }
+
 }

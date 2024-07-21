@@ -79,6 +79,10 @@ spec:
           label: 选择器名称(严格按照说明的示例格式填写)
           help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；默认主题的暗色切换选择器为html=dark，可以在控制台的html或body元素上查看该属性
           value: "data-theme=dark"
+
+    - group: advanceSettings
+      label: 高级配置
+      formSchema:
         - $formkit: radio
           id: adaptLsdPlugin
           key: adaptLsdPlugin
@@ -91,3 +95,28 @@ spec:
               label: 开启
             - value: false
               label: 关闭
+        - $formkit: radio
+          id: adaptMultiComment
+          key: adaptMultiComment
+          name: adaptMultiComment
+          label: 是否适配多评论区页面
+          value: false
+          help: 比如你的瞬间页面中每一个瞬间内容下都需要评论区，则需要选择该页面
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: repeater
+          if: $get(adaptMultiComment).value
+          id: multiCommentPage
+          name: multiCommentPage
+          label: 多评论页面
+          value: []
+          max: 6
+          min: 0
+          children:
+            - $formkit: text
+              name: templateName
+              value: "moments"
+              label: 选择的模版列表

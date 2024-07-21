@@ -1,14 +1,18 @@
 package xin.wenjing.halo.artalk;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.PropertyPlaceholderHelper;
 import org.thymeleaf.context.ITemplateContext;
+import org.thymeleaf.model.IAttribute;
 import org.thymeleaf.model.IProcessableElementTag;
 import org.thymeleaf.processor.element.IElementTagStructureHandler;
 import run.halo.app.plugin.PluginContext;
 import run.halo.app.theme.dialect.CommentWidget;
 import xin.wenjing.halo.service.SettingConfigGetter;
+import java.util.Arrays;
 import java.util.Properties;
 
 /**
@@ -21,6 +25,8 @@ import java.util.Properties;
 @Component
 public class ArtalkComment implements CommentWidget {
 
+    private static final String TEMPLATE_ID_VARIABLE = "_templateId";
+
     private final PluginContext pluginContext;
 
     static final PropertyPlaceholderHelper PROPERTY_PLACEHOLDER_HELPER = new PropertyPlaceholderHelper("${", "}");
@@ -31,12 +37,13 @@ public class ArtalkComment implements CommentWidget {
     public void render(ITemplateContext context, IProcessableElementTag elementTag, IElementTagStructureHandler iElementTagStructureHandler) {
 
         var siteConfig = settingConfigGetter.getBasicConfig().blockOptional().orElseThrow();
-
+        var advanceConfig = settingConfigGetter.getAdvanceConfig().blockOptional().orElseThrow();
+        String commentId = multiCommentDomId(elementTag);
         String siteTitle = String.valueOf(siteConfig.getSiteTitle());
         String artalkUrl = String.valueOf(siteConfig.getArtalkUrl());
 
         String linkJump = "";
-        if(Boolean.valueOf(siteConfig.isAdaptLsdPlugin())){
+        if(Boolean.valueOf(advanceConfig.isAdaptLsdPlugin())){
             linkJump = adaptLinkJump();
         }
 
@@ -246,6 +253,44 @@ public class ArtalkComment implements CommentWidget {
             </script>
             """;
         return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(script, properties);
+    }
+
+    /**
+     * 评论唯一标识生成
+     * @param tag
+     * @return
+     */
+    private String multiCommentDomId(IProcessableElementTag tag){
+
+        IAttribute groupAttribute = tag.getAttribute("group");
+        IAttribute kindAttribute = tag.getAttribute("kind");
+        IAttribute nameAttribute = tag.getAttribute("name");
+
+        String group = groupAttribute.getValue() == null ? "" : StringUtils.defaultString(groupAttribute.getValue());
+        String name = kindAttribute.getValue();
+        String kind = nameAttribute.getValue();
+        Assert.notNull(name, "The name must not be null.");
+        Assert.notNull(kind, "The kind must not be null.");
+        String groupKindNameAsDomId = String.join("-", group, kind, name);
+        String commentId = "artalk-" + groupKindNameAsDomId.replaceAll("[^\\-_a-zA-Z0-9\\s]", "-")
+            .replaceAll("(-)+", "-");
+        System.out.println("唯一节点标识符：" + commentId);
+        System.out.println("参数打印==========：" + group + kindAttribute.getValue() +"========" +  nameAttribute.getValue());
+        return commentId;
+    }
+
+    /**
+     * 返回模版名称
+     * @param context
+     * @return
+     */
+    public static String getTemplateId(ITemplateContext context) {
+        try {
+            String  templateName = context.getVariable(TEMPLATE_ID_VARIABLE).toString();
+            return templateName != null && templateName.length() > 0 ? templateName : "";
+        }catch (Exception e){
+            return "";
+        }
     }
 
 }
