@@ -12,11 +12,9 @@ import org.thymeleaf.processor.element.IElementTagStructureHandler;
 import run.halo.app.plugin.PluginContext;
 import run.halo.app.theme.dialect.CommentWidget;
 import xin.wenjing.halo.service.SettingConfigGetter;
-import java.util.Arrays;
 import java.util.Properties;
 
 /**
- * 功能描述
  * 通过评论扩展点加入 artalk 评论
  * @author: dreamChaser
  * @date: 2024年06月03日 16:29
@@ -38,7 +36,7 @@ public class ArtalkComment implements CommentWidget {
 
         var siteConfig = settingConfigGetter.getBasicConfig().blockOptional().orElseThrow();
         var advanceConfig = settingConfigGetter.getAdvanceConfig().blockOptional().orElseThrow();
-        String commentId = multiCommentDomId(elementTag);
+        String commentDomId = multiCommentDomId(elementTag, context, advanceConfig.isCommentPathKey());
         String siteTitle = String.valueOf(siteConfig.getSiteTitle());
         String artalkUrl = String.valueOf(siteConfig.getArtalkUrl());
 
@@ -53,17 +51,17 @@ public class ArtalkComment implements CommentWidget {
                 String darkModeAttribute = String.valueOf(siteConfig.getDarkModeAttribute());
                 String finalTmpl = "";
                 if(siteConfig.getEnableLightDark().equals("elementClassName")){
-                    finalTmpl = normalTemplateResolve(siteTitle, artalkUrl, darkModeAttribute, "className");
+                    finalTmpl = normalTemplateResolve(siteTitle, artalkUrl, darkModeAttribute, "className", commentDomId, context);
                 }else{
-                    finalTmpl = normalTemplateResolve(siteTitle, artalkUrl, darkModeAttribute, "attribute");
+                    finalTmpl = normalTemplateResolve(siteTitle, artalkUrl, darkModeAttribute, "attribute", commentDomId, context);
                 }
                 iElementTagStructureHandler.replaceWith(finalTmpl + linkJump, false);
             }else if(siteConfig.getEnableLightDark().equals("single")){
                 // 独立明暗模式切换
-                final var ldArtalkTmpl = ldTemplateResolve(siteTitle, artalkUrl);
+                final var ldArtalkTmpl = ldTemplateResolve(siteTitle, artalkUrl, commentDomId, context);
                 iElementTagStructureHandler.replaceWith(ldArtalkTmpl + linkJump, false);
             }else{
-                iElementTagStructureHandler.replaceWith(moderateTemplateResolve(siteTitle, artalkUrl) + linkJump, false);
+                iElementTagStructureHandler.replaceWith(moderateTemplateResolve(siteTitle, artalkUrl, commentDomId , context) + linkJump, false);
             }
         }
     }
@@ -74,11 +72,21 @@ public class ArtalkComment implements CommentWidget {
      * @param artalkUrl
      * @return
      */
-    private String ldTemplateResolve(String siteTitle, String artalkUrl){
+    private String ldTemplateResolve(String siteTitle, String artalkUrl, String pathKeyDom, ITemplateContext context){
 
         final Properties properties = new Properties();
         properties.setProperty("siteTitle", siteTitle);
         properties.setProperty("artalkUrl", artalkUrl);
+
+        if(pathKeyDom != null){
+            String curTemplateId = getTemplateId(context);
+            properties.setProperty("mountedDomId", pathKeyDom);
+            properties.setProperty("pageKey", "/" + curTemplateId + "/" + pathKeyDom);
+            properties.setProperty("pageKeyType", "normalStr");
+        }else{
+            properties.setProperty("mountedDomId", "artalk-comment");
+            properties.setProperty("pageKeyType", "functionStr");
+        }
 
         // 同时兼容使用pjax的主题和未使用pjax的主题
         final var artalkTmpl = """
@@ -91,21 +99,25 @@ public class ArtalkComment implements CommentWidget {
                             </label>
                         </div>
                     </div>
-                    <div id="artalk-comment"></div>
+                    <div id="${mountedDomId}"></div>
                 </div>
                 <script type="text/javascript" data-pjax defer>
                     function initArtalkComment(){
-                        if(document.querySelectorAll("#artalk-comment").length){
-                            window.artalkItem = Artalk.init({
-                                el: '#artalk-comment',
-                                pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                                pageTitle: "",
-                                server: "${artalkUrl}",
-                                site:"${siteTitle}",
-                                countEl: '#ArtalkCount',
-                                dark: "auto"
-                            })
+                        let pageKeyResolve = "";
+                        if("${pageKeyType}" == "functionStr"){
+                            pageKeyResolve = window.location.pathname.replace(/\\/page\\/\\d$/, "");
+                        }else if("${pageKeyType}" == "normalStr"){
+                            pageKeyResolve = "${pageKey}";
                         }
+                        window.artalkItem = Artalk.init({
+                            el: '#${mountedDomId}',
+                            pageKey: pageKeyResolve,
+                            pageTitle: "",
+                            server: "${artalkUrl}",
+                            site:"${siteTitle}",
+                            countEl: '#ArtalkCount',
+                            dark: "auto"
+                        })
                     }
                     function checkboxDarkMode(checkbox){
                         if(checkbox.checked){
@@ -127,7 +139,7 @@ public class ArtalkComment implements CommentWidget {
         return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(artalkTmpl, properties);
     }
 
-    private String normalTemplateResolve(String siteTitle, String artalkUrl, String darkModeAttribute, String switchType){
+    private String normalTemplateResolve(String siteTitle, String artalkUrl, String darkModeAttribute, String switchType, String commentDomId, ITemplateContext context){
 
         final Properties properties = new Properties();
         properties.setProperty("siteTitle", siteTitle);
@@ -136,48 +148,62 @@ public class ArtalkComment implements CommentWidget {
         properties.setProperty("dataThemeName", darkModeAttribute.split("=")[1]);
         properties.setProperty("switchType", switchType);
 
+        if(commentDomId != null){
+            String curTemplateId = getTemplateId(context);
+            properties.setProperty("mountedDomId", commentDomId);
+            properties.setProperty("pageKey", "/" + curTemplateId + "/" + commentDomId);
+            properties.setProperty("pageKeyType", "normalStr");
+        }else{
+            properties.setProperty("mountedDomId", "artalk-comment");
+            properties.setProperty("pageKeyType", "functionStr");
+        }
+
         // 同时兼容使用pjax的主题和未使用pjax的主题
         final var artalkTmpl = """
                 <div id="post-comment">
-                    <div id="artalk-comment"></div>
+                    <div id="${mountedDomId}"></div>
                 </div>
-                <script type="text/javascript" data-pjax>
+                <script type="text/javascript" defer>
                     function initArtalk(){
-                        if(document.querySelectorAll("#artalk-comment").length){
-                            window.artalkItem = Artalk.init({
-                                el: '#artalk-comment',
-                                pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                                pageTitle: "",
-                                server: "${artalkUrl}",
-                                site:"${siteTitle}",
-                                countEl: '#ArtalkCount',
-                                darkMode: 'auto'
-                            })
-                            window.artalkItem.on("created", ()=>{
-                                setDarkMode();
-                                // 创建一个观察器实例并传入回调函数
-                                const observer = new MutationObserver((mutationsList, observer) => {
-                                    for (let mutation of mutationsList) {
-                                        if (mutation.type === 'attributes' && mutation.attributeName === '${dataTheme}') {
-                                            setDarkMode();
-                                        }else{
-                                            setDarkMode();
-                                        }
-                                    }
-                                });
-                                let targetNode = null;
-                                if('${switchType}' == "className"){
-                                    targetNode = document.querySelector('${dataTheme}');
-                                }else{
-                                    targetNode = document.querySelector('[${dataTheme}]');
-                                }
-                                
-                                if(targetNode){
-                                    const config = { attributes: true, childList: false, subtree: false };
-                                    observer.observe(targetNode, config);
-                                }
-                            })
+                        let pageKeyResolve = "";
+                        if("${pageKeyType}" == "functionStr"){
+                            pageKeyResolve = window.location.pathname.replace(/\\/page\\/\\d$/, "");
+                        }else if("${pageKeyType}" == "normalStr"){
+                            pageKeyResolve = "${pageKey}";
                         }
+                        window.artalkItem = Artalk.init({
+                            el: '#${mountedDomId}',
+                            pageKey: pageKeyResolve,
+                            pageTitle: "",
+                            server: "${artalkUrl}",
+                            site: "${siteTitle}",
+                            countEl: '#ArtalkCount',
+                            darkMode: 'auto'
+                        });
+                        window.artalkItem.on("created", ()=>{
+                            setDarkMode();
+                            // 创建一个观察器实例并传入回调函数
+                            const observer = new MutationObserver((mutationsList, observer) => {
+                                for (let mutation of mutationsList) {
+                                    if (mutation.type === 'attributes' && mutation.attributeName === '${dataTheme}') {
+                                        setDarkMode();
+                                    }else{
+                                        setDarkMode();
+                                    }
+                                }
+                            });
+                            let targetNode = null;
+                            if('${switchType}' == "className"){
+                                targetNode = document.querySelector('${dataTheme}');
+                            }else{
+                                targetNode = document.querySelector('[${dataTheme}]');
+                            }
+                            
+                            if(targetNode){
+                                const config = { attributes: true, childList: false, subtree: false };
+                                observer.observe(targetNode, config);
+                            }
+                        });
                     }
                     function setDarkMode() {
                         if (typeof window.artalkItem !== 'object') return;
@@ -200,30 +226,42 @@ public class ArtalkComment implements CommentWidget {
         return PROPERTY_PLACEHOLDER_HELPER.replacePlaceholders(artalkTmpl, properties);
     }
 
-    private String moderateTemplateResolve(String siteTitle, String artalkUrl){
+    private String moderateTemplateResolve(String siteTitle, String artalkUrl, String commentPathKey, ITemplateContext context){
 
         final Properties properties = new Properties();
         properties.setProperty("siteTitle", siteTitle);
         properties.setProperty("artalkUrl", artalkUrl);
-
+        if(commentPathKey != null){
+            String curTemplateId = getTemplateId(context);
+            properties.setProperty("mountedDomId", commentPathKey);
+            properties.setProperty("pageKey", "/" + curTemplateId + "/" + commentPathKey);
+            properties.setProperty("pageKeyType", "normalStr");
+        }else{
+            properties.setProperty("mountedDomId", "artalk-comment");
+            properties.setProperty("pageKeyType", "functionStr");
+        }
         // 同时兼容使用pjax的主题和未使用pjax的主题
         final var artalkTmpl = """
                 <div id="post-comment">
-                    <div id="artalk-comment"></div>
+                    <div id="${mountedDomId}"></div>
                 </div>
                 <script type="text/javascript" data-pjax>
                     function initArtalk(){
-                        if(document.querySelectorAll("#artalk-comment").length){
-                            window.artalkItem = Artalk.init({
-                                el: '#artalk-comment',
-                                pageKey: window.location.pathname.replace(/\\/page\\/\\d$/, ""),
-                                pageTitle: "",
-                                server: "${artalkUrl}",
-                                site:"${siteTitle}",
-                                countEl: '#ArtalkCount',
-                                darkMode: 'auto'
-                            })
+                        let pageKeyResolve = "";
+                        if("${pageKeyType}" == "functionStr"){
+                            pageKeyResolve = window.location.pathname.replace(/\\/page\\/\\d$/, "");
+                        }else if("${pageKeyType}" == "normalStr"){
+                            pageKeyResolve = "${pageKey}";
                         }
+                        Artalk.init({
+                            el: '#${mountedDomId}',
+                            pageKey: pageKeyResolve,
+                            pageTitle: "",
+                            server: "${artalkUrl}",
+                            site:"${siteTitle}",
+                            countEl: '#ArtalkCount',
+                            darkMode: 'auto'
+                        })
                     }
                     document.addEventListener("DOMContentLoaded",()=>{
                         initArtalk();
@@ -260,8 +298,11 @@ public class ArtalkComment implements CommentWidget {
      * @param tag
      * @return
      */
-    private String multiCommentDomId(IProcessableElementTag tag){
+    private String multiCommentDomId(IProcessableElementTag tag, ITemplateContext context, boolean isCommentPathKey){
 
+        if(!isCommentPathKey){
+            return null;
+        }
         IAttribute groupAttribute = tag.getAttribute("group");
         IAttribute kindAttribute = tag.getAttribute("kind");
         IAttribute nameAttribute = tag.getAttribute("name");
@@ -274,8 +315,6 @@ public class ArtalkComment implements CommentWidget {
         String groupKindNameAsDomId = String.join("-", group, kind, name);
         String commentId = "artalk-" + groupKindNameAsDomId.replaceAll("[^\\-_a-zA-Z0-9\\s]", "-")
             .replaceAll("(-)+", "-");
-        System.out.println("唯一节点标识符：" + commentId);
-        System.out.println("参数打印==========：" + group + kindAttribute.getValue() +"========" +  nameAttribute.getValue());
         return commentId;
     }
 
