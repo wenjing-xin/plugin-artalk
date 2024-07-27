@@ -231,6 +231,7 @@ public class ArtalkComment implements CommentWidget {
         final Properties properties = new Properties();
         properties.setProperty("siteTitle", siteTitle);
         properties.setProperty("artalkUrl", artalkUrl);
+
         if(commentPathKey != null){
             String curTemplateId = getTemplateId(context);
             properties.setProperty("mountedDomId", commentPathKey);
@@ -253,7 +254,7 @@ public class ArtalkComment implements CommentWidget {
                         }else if("${pageKeyType}" == "normalStr"){
                             pageKeyResolve = "${pageKey}";
                         }
-                        Artalk.init({
+                        window.artalkItem = Artalk.init({
                             el: '#${mountedDomId}',
                             pageKey: pageKeyResolve,
                             pageTitle: "",
@@ -261,7 +262,7 @@ public class ArtalkComment implements CommentWidget {
                             site:"${siteTitle}",
                             countEl: '#ArtalkCount',
                             darkMode: 'auto'
-                        })
+                        });
                     }
                     document.addEventListener("DOMContentLoaded",()=>{
                         initArtalk();
