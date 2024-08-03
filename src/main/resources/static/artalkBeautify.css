@@ -32,8 +32,8 @@
     border-radius: 8px;
     display: inline;
 }
-.atk-comment>.atk-main>.atk-body>.atk-content a:not(.fancybox)::after{
-    content: " 🔗";
+.atk-comment>.atk-main>.atk-body>.atk-content a:not(.fancybox)::before{
+    content: "🔗 ";
 }
 .atk-comment>.atk-main>.atk-body>.atk-content img{
     border-radius: 12px;
