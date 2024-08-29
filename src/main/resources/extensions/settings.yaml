@@ -16,7 +16,7 @@ spec:
         - $formkit: url
           name: authDomain
           label: artalk添加的可信域名
-          value:
+          value: "https://blog.domain.com"
           help: 也就是你当前使用该插件的博客域名，注意不要带/
         - $formkit: url
           name: artalkUrl
