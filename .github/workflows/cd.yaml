@@ -7,10 +7,11 @@ on:
 
 jobs:
   cd:
-    uses: halo-sigs/reusable-workflows/.github/workflows/plugin-cd.yaml@v2
+    uses: halo-sigs/reusable-workflows/.github/workflows/plugin-cd.yaml@v1
     secrets:
-      halo-pat: ${{ secrets.HALO_PAT }}
+      halo-username: ${{ secrets.HALO_USERNAME }}
+      halo-password: ${{ secrets.HALO_PASSWORD }}
     permissions:
       contents: write
     with:
-      app-id: app-mBoYu
+      app-id:  app-mBoYu
