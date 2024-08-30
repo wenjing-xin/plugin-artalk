@@ -9,21 +9,9 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # required by automatic version
-      - name: Setup Environment
-        uses: halo-sigs/actions/plugin-setup-env@v1
-        with:
-          skip-node-setup: true
-
-      - name: Build with gradle
-        run: ./gradlew clean build
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: artifacts
-          path: "build/libs"
+  ci:
+    uses: halo-sigs/reusable-workflows/.github/workflows/plugin-ci.yaml@v1
+    with:
+      node-version: "20"
+      pnpm-version: "9"
+      ui-path: "ui"
