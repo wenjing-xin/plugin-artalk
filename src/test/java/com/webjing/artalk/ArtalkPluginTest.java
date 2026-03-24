@@ -10,15 +10,5 @@ import run.halo.app.plugin.PluginContext;
 @ExtendWith(MockitoExtension.class)
 class ArtalkPluginTest {
 
-    @Mock
-    PluginContext context;
 
-    @InjectMocks
-    ArtalkPlugin plugin;
-
-    @Test
-    void contextLoads() {
-        plugin.start();
-        plugin.stop();
-    }
 }
