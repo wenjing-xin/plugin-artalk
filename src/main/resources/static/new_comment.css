@@ -1,0 +1,326 @@
+@charset "UTF-8";
+:root {
+    --style-border: 1px solid #e3e8f7;
+    --style-border-always: 1px solid #e3e8f7;
+    --heo-radius-full: 50px;
+    --heo-vip: #e5a80d;
+    --heo-shadow-border: 0 8px 16px -4px #2c2d300c;
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    height: 100%;
+    font-size: 20px;
+}
+
+body {
+    position: relative;
+    min-height: 100%;
+    color: #18171d;
+    font-size: 16px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei";
+    line-height: 2;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0px;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin: 1rem 0px 0.7rem;
+    color: #1f2d3d;
+    font-weight: 700;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    font-size: inherit !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+.layout {
+    display: flex;
+    margin: 0px auto;
+    padding: 2rem 15px;
+    max-width: 1200px;
+}
+
+@media screen and (max-width: 900px) {
+    .layout {
+        -webkit-box-orient: vertical;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .layout {
+        padding: 1rem 5px;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    .layout {
+        max-width: 1500px;
+    }
+}
+
+
+@media screen and (min-width: 2000px) {
+    .layout.hide-aside {
+        max-width: 1300px;
+    }
+}
+
+.layout.hide-aside > div {
+    width: 100% !important;
+}
+
+
+/* 最小网页大小 */
+#page {
+    min-height: calc(100vh - 464px);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 6px
+}
+
+::-webkit-scrollbar-thumb {
+    background: #f2b94b23;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #18171d
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f2b94b23;
+    opacity: 1;
+    display: block!important
+}
+
+::-webkit-scrollbar-track {
+    background-color: #18171d
+}
+/* 网页最大宽度 */
+.layout.hide-aside {
+    max-width: 1400px;
+}
+/* 一行内容 */
+
+.author-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* 一行内容，纵向组件 */
+
+.author-content-item-group.column {
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    justify-content: space-between;
+}
+
+/* 一行内容，横向组件 */
+
+.author-content-item {
+    width: 49%;
+    border-radius: 24px;
+    border: var(--style-border-always);
+    box-shadow: var(--heo-shadow-border);
+    position: relative;
+    padding: 1rem 2rem;
+    overflow: hidden;
+    opacity: 0.9;
+}
+
+.author-content-item.single {
+    width: 100%;
+}
+
+.author-content-item .author-content-item-title {
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.author-content-item .author-content-item-tips {
+    opacity: 0.8;
+    font-size: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    .author-content-item {
+        width: 100% !important;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+
+    .author-content-item-group.column {
+        width: 100% !important;
+    }
+
+    .author-content {
+        margin-top: 0rem;
+    }
+}
+
+.author-content-item.single.reward .author-content-item .author-content-item-title {
+    color: #FF3842;
+}
+
+#comments-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-height: 100px;
+    width: 100%;
+    margin: 1.5rem auto 0;
+}
+
+#comments-page .comment-card {
+    position: relative;
+    width: calc(100% / 4 - 9px);
+    border-radius: 12px;
+    border: 1px solid #e3e8f7;
+    padding: 14px;
+    cursor: pointer;
+    transition: .3s;
+    overflow: hidden;
+    box-shadow: 0 8px 16px -4px #2c2d300c;
+    background: #f8f6f5
+}
+
+span.isBlogger {
+    background: #425AEF;
+    color: white;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 1;
+    display: inline-flex;
+    padding: 3px 4px 4px 4.5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    letter-spacing: 1px;
+}
+
+@media screen and (max-width: 900px) {
+    #comments-page .comment-card {
+        width: calc(100% / 2 - 6px)
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #comments-page .comment-card {
+        width: 100%
+    }
+}
+
+#comments-page .comment-card:hover {
+    border-color: #425AEF;
+}
+
+#comments-page .comment-card:hover .comment-article {
+    opacity: 1;
+    top: 0
+}
+
+#comments-page .comment-card .comment-info {
+    display: flex;
+    align-items: center;
+    padding-bottom: 14px;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed #97bcfb
+}
+
+#comments-page .comment-card .comment-info img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 !important
+}
+
+#comments-page .comment-card .comment-info .comment-information {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12px;
+    line-height: 1.5
+}
+
+#comments-page .comment-card .comment-info .comment-information .comment-user {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 15px
+}
+
+#comments-page .comment-card .comment-info .comment-information .comment-author::after {
+    content: "\f3a5";
+    font-family: "Font Awesome 6 Free" !important;
+    padding-left: 6px;
+    padding-top: 5px;
+    font-size: 14px;
+    color: #fdc22d
+}
+
+#comments-page .comment-card .comment-info .comment-information .comment-time {
+    opacity: .8;
+    font-size: 15px
+}
+
+#comments-page .comment-card .comment-info .comment-content {
+    margin: 8px 5px 0
+}
+
+.comment-article,
+.comment-content {
+    transition: .3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.7;
+    font-weight: 400
+}
+
+.comment-article {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    background: #425AEF;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    text-align: center
+}

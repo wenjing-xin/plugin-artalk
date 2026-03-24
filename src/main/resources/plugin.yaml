@@ -1,0 +1,24 @@
+# Refer https://docs.halo.run/developer-guide/plugin/basics/manifest
+
+apiVersion: plugin.halo.run/v1alpha1
+kind: Plugin
+metadata:
+  # The name defines how the plugin is invoked, A unique name
+  name: plugin-artalk
+spec:
+  enabled: true
+  requires: ">=2.23.0"
+  author:
+    name: webjing
+    website: https://auth.webjing.com
+  logo: logo.png
+  homepage: https://auth.webjing.com
+  repo: https://github.com/wenjing-xin/plugin-artalk
+  issues: https://github.com/wenjing-xin/plugin-artalk/issues
+  displayName: "artalk评论区"
+  description: "将 artalk 评论系统集成到 Halo"
+  license:
+    - name: "GPL-3.0"
+      url: "https://github.com/webjng/artalk/blob/main/LICENSE"
+  settingName: plugin-artalk-setting
+  configMapName: plugin-artalk-configmap

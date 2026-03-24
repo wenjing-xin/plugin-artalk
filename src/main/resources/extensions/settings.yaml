@@ -1,0 +1,109 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: plugin-artalk-setting
+spec:
+  forms:
+    - group: baseConf
+      label: 基本配置
+      formSchema:
+        - $formkit: text
+          name: siteTitle
+          label: 站点名称
+          value: "default site"
+          help: 和artalk里边配置的站点名称一致即可
+          validation: required
+        - $formkit: url
+          name: authDomain
+          label: artalk添加的可信域名
+          value: "https://blog.domain.com"
+          help: 也就是你当前使用该插件的博客域名，注意不要带/
+        - $formkit: url
+          name: artalkUrl
+          label: artalk 部署地址
+          value: "https://artalk.domain.com"
+          help: 例如https://artalk.domain.com,注意不要带/
+          validation: required
+        - $formkit: radio
+          name: enableLatex
+          id: enableLatex
+          key: enableLatex
+          label: 是否开启数学公式支持
+          help: 开启后评论区可支持数学公式，对于学术性站点是必不可少的
+          value: false
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: radio
+          name: enableCustomCss
+          id: enableCustomCss
+          key: enableCustomCss
+          label: 是否自定css样式
+          value: false
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: code
+          name: customCss
+          if: $get(enableCustomCss).value
+          label: css样式
+          value: a{display:inline-block;}
+          language: css
+          help: 支持css语法样式,无需包裹style标签
+          height: 350px
+        - $formkit: select
+          name: enableLightDark
+          id: enableLightDark
+          key: enableLightDark
+          label: 暗黑模式适配
+          help: 明暗切换属性选择器是自动会根据主题的暗黑模式进行切换，但需要主题有对应的选择器后或者类名进行切换，目前绝多大数的明暗切换都是根据选择器的变化进行切换的，如果不是此类方式的明暗切换，请选择独立切换
+          value: disable
+          options:
+            - value: attribute
+              label: 明暗切换属性选择器
+            - value: elementClassName
+              label: 元素类名明暗切换
+            - value: single
+              label: 独立切换
+            - value: disable
+              label: 禁用（明暗模式下的中性色，不是很美观，但内容清晰可见）
+        - $formkit: text
+          if: $get(enableLightDark).value == attribute || $get(enableLightDark).value == elementClassName
+          id: darkModeAttribute
+          key: darkModeAttribute
+          name: darkModeAttribute
+          label: 选择器名称(严格按照说明的示例格式填写)
+          help: 填入CSS选择器会在对应选择器生效时启用夜间模式，例如hao主题的明暗切换选择器为：data-theme=dark；默认主题的暗色切换选择器为html=dark，可以在控制台的html或body元素上查看该属性
+          value: "data-theme=dark"
+
+    - group: advanceSettings
+      label: 高级配置
+      formSchema:
+        - $formkit: radio
+          id: adaptLsdPlugin
+          key: adaptLsdPlugin
+          name: adaptLsdPlugin
+          label: 是否开启评论区链接跳转中台
+          value: false
+          help: 使用该功能前需要配合插件plugin-link-security-detect，下载地址：https://blog.wenjing.xin/docs/halo-plugins/lsd-plugin/introduce
+          options:
+            - value: true
+              label: 开启
+            - value: false
+              label: 关闭
+        - $formkit: radio
+          id: commentPathKey
+          key: commentPathKey
+          name: commentPathKey
+          label: 评论区定位标识
+          value: false
+          help: 请谨慎修改，否则会导致评论区无法定位至相关页面，如果是第一次使用artalk，建议选择halo默认评论DomId定位，方便后续的数据迁移
+          options:
+            - value: true
+              label: halo默认评论DomId定位
+            - value: false
+              label: 相对路径（默认）
